@@ -8,13 +8,7 @@ const About = () => {
           About Us
         </p>
         <p className="px-4 text-center text-lg leading-9 text-slate-600">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias modi
-          exercitationem beatae delectus hic corporis soluta accusamus doloribus
-          eaque mollitia praesentium recusandae provident nulla voluptates
-          rerum, aperiam totam! Fugit asperiores quod, facere nihil quam hic non
-          dignissimos maxime ea eos ullam perferendis repellendus tempora ut
-          mollitia vel quibusdam, necessitatibus ratione voluptate eveniet
-          blanditiis beatae, ipsam nulla? Unde nam quod eos?
+        Crowne Plaza is known for its comfortable rooms and suites with panoramic views of Taal Volcano. The Hotel is few minutes away from Tagaytay tourist spots like Tagaytay Skyranch and Picnic Groove perfect for Family bonding Vacation and unwinding.  Each room is designed in modern and cozy,  with a comfortable bed and a functional bathroom. it has its own TV, air conditioning, and Free WiFi and everything you need for a pleasant stay.
         </p>
       </div>
     </div>
