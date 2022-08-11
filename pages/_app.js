@@ -1,0 +1,17 @@
+import '../styles/globals.css'
+import { PageLayout } from '../components'
+import { AppWrapper } from '../context/AppContext'
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <>
+      <AppWrapper>
+        <PageLayout>
+          <Component {...pageProps} />
+        </PageLayout>
+      </AppWrapper>
+    </>
+  )
+}
+
+export default MyApp
