@@ -21,6 +21,10 @@ const ReservationSchema = new mongoose.Schema({
     type: Date,
     required: [true, 'Please fill up this field'],
   },
+  email: {
+    type: String,
+    required: [true, 'Please fill up this field'],
+  },
   preferredRoom: {
     type: String,
     required: [true, 'Please fill up this field'],

@@ -9,9 +9,13 @@ import {
 import { getPaymentById } from '../../../services/payment.services'
 import { useRouter } from 'next/router'
 import { updateStatus } from '../../../services/reservation.services'
-import { postConfirmationReceipt } from '../../../services/receipt.services'
+import {
+  postConfirmationReceipt,
+  sendReceipt,
+} from '../../../services/receipt.services'
 const Payment = () => {
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
   const id = router.query.id
   const [modalData, setModalData] = useState()
   const [data, setData] = useState()
@@ -21,6 +25,10 @@ const Payment = () => {
       const { success, data } = await getPaymentById(id)
       if (success) {
         setData(data)
+        if (data.status == 'reserved') {
+          router.push('/customer/reservation')
+        }
+        console.log(data)
       }
     }
     if (!mounted.current) {
@@ -30,17 +38,34 @@ const Payment = () => {
       mounted.current = true
     }
   })
-  const paymentHandler = async (data) => {
-    console.log(data)
+  const paymentHandler = async (receiptData) => {
+    setIsLoading(true)
+    console.log(receiptData)
     const newData = {
       status: 'reserved',
     }
+
     const update_res = await updateStatus(id, newData)
     if (update_res.success) {
-      const res = await postConfirmationReceipt(data)
+      const res = await postConfirmationReceipt(receiptData)
+      console.log({
+        ...receiptData,
+        reference: res?.data._id,
+        subject: 'confirmation',
+        name: data?.name,
+        email: data?.email,
+      })
+      const result = await sendReceipt({
+        ...receiptData,
+        reference: res?.data._id,
+        subject: 'confirmation',
+        name: data?.name,
+        email: data?.email,
+      })
       if (res.success) {
         setModalData(res.data)
       }
+      setIsLoading(false)
     }
   }
   return (
@@ -65,10 +90,10 @@ const Payment = () => {
             Payment for Reservation
           </h1>
           <PaymentLayout
-            reason="none"
             action={paymentHandler}
             total={data?.total}
             id={id}
+            isLoading={isLoading}
             mode="confirmation"
           />
         </div>

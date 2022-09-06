@@ -36,7 +36,7 @@ const ReservedList = ({ role, status }) => {
         <title>Reserved List | Crowné Plaza</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <RoleHeader active={status} role={role} />
+      <RoleHeader active="cancelled" role={role} />
       <div className="mx-auto w-full max-w-container p-4 ">
         <div className="flex">
           <input

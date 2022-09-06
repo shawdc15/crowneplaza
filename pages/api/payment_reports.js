@@ -9,7 +9,7 @@ export default async (req, res) => {
   switch (method) {
     case 'GET':
       try {
-        const receipt = await Receipt.find({ receiptFor: 'confirmation' })
+        const receipt = await Receipt.find({ status: 'paid' })
         res.status(200).json({
           success: true,
           data: receipt,

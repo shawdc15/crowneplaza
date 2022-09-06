@@ -63,6 +63,7 @@ const History = () => {
                           image,
                           roomType,
                           total,
+                          preferredRoom,
                         },
                         index
                       ) => (
@@ -81,7 +82,13 @@ const History = () => {
                           </div>
                           <div className="py-4 md:p-4">
                             <div>
-                              <p className="my-2 text-xl">{roomType}</p>
+                              <p className="my-2 text-xl">
+                                {roomType}
+                                <span className="my-2 ml-2 rounded-md bg-emerald-400 px-2 py-1 text-lg text-white">
+                                  Room No: {preferredRoom}
+                                </span>
+                              </p>
+
                               <p>
                                 1 room,{' '}
                                 {`${
@@ -100,61 +107,78 @@ const History = () => {
                                 Check Out:{' '}
                                 {moment(checkOut).format('MMM DD YYYY')}
                               </p>
-                              <p className="my-3 text-xl text-slate-900">
+                              <p className="my-3 text-lg text-slate-900">
                                 Total: &#8369; {formatTotal(total)}
                               </p>
+                              <p className=" my-3 text-lg font-semibold text-slate-900">
+                                Downpayment Total: &#8369;{' '}
+                                {formatTotal(total / 2)}
+                              </p>
                             </div>
-                            {status == 'reserved' ? (
-                              <div className="flex gap-4">
-                                <p
-                                  className="
+                            <div className="flex gap-4">
+                              {status == 'reserved' ? (
+                                <>
+                                  <p
+                                    className="
                               my-2 
                             rounded-md bg-slate-200 px-4 py-2 capitalize text-slate-900  disabled:bg-slate-600"
-                                >
-                                  Status: Paid and Reserved
-                                </p>
-                                <Link
-                                  href={`/customer/reservation/cancel/${_id}`}
-                                >
-                                  <button
-                                    className="
+                                  >
+                                    Status: Paid and Reserved
+                                  </p>
+                                  <Link
+                                    href={`/customer/reservation/cancel/${_id}`}
+                                  >
+                                    <button
+                                      className="
                              my-2 rounded-md
                            bg-emerald-500 px-4 py-2 capitalize text-white  disabled:bg-slate-600"
+                                    >
+                                      Cancel Booking
+                                    </button>
+                                  </Link>
+                                </>
+                              ) : status == 'approved' ? (
+                                <>
+                                  <p
+                                    className="
+                              my-2 cursor-default
+                              rounded-md bg-slate-200
+                           px-4 py-2 text-center capitalize text-slate-900  disabled:bg-slate-600"
                                   >
-                                    Cancel Booking
-                                  </button>
-                                </Link>
-                              </div>
-                            ) : status == 'approved' ? (
-                              <div className="flex gap-4">
-                                <p
+                                    Status: {status}
+                                  </p>
+                                  <Link href={`/customer/payment/${_id}`}>
+                                    <button
+                                      className="
+                             my-2 rounded-md
+                           bg-emerald-500 px-4 py-2 capitalize text-white  disabled:bg-slate-600"
+                                    >
+                                      Make a payment
+                                    </button>
+                                  </Link>
+                                </>
+                              ) : status === 'approve_cancellation' ? (
+                                <>
+                                  <p
+                                    className="
+                              my-2 cursor-default
+                              rounded-md bg-slate-200
+                           px-4 py-2 text-center capitalize text-slate-900  disabled:bg-slate-600"
+                                  >
+                                    Status: Approved Cancellation
+                                  </p>
+                                </>
+                              ) : (
+                                <button
                                   className="
                               my-2 cursor-default
                               rounded-md bg-slate-200
                            px-4 py-2 text-center capitalize text-slate-900  disabled:bg-slate-600"
                                 >
                                   Status: {status}
-                                </p>
-                                <Link href={`/customer/payment/${_id}`}>
-                                  <button
-                                    className="
-                             my-2 rounded-md
-                           bg-emerald-500 px-4 py-2 capitalize text-white  disabled:bg-slate-600"
-                                  >
-                                    Make a payment
-                                  </button>
-                                </Link>
-                              </div>
-                            ) : (
-                              <button
-                                className="
-                              my-2 cursor-default
-                              rounded-md bg-slate-200
-                           px-4 py-2 text-center capitalize text-slate-900  disabled:bg-slate-600"
-                              >
-                                Status: {status}
-                              </button>
-                            )}
+                                </button>
+                              )}
+                            </div>
                           </div>
                         </div>
                       )

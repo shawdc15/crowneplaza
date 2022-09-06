@@ -8,6 +8,7 @@ import {
 } from '../../services/reservation.services'
 const ReservedCardModal = ({ setData, data, id, setModal }) => {
   const [selectedData, setSelectedData] = useState()
+  const [selectedLargeImage, setSelectedLargeImage] = useState(null)
   useEffect(async () => {
     const res = await getReservationById(id)
     if (res.success) {
@@ -45,6 +46,14 @@ const ReservedCardModal = ({ setData, data, id, setModal }) => {
   }
   const declineHandler = async () => {
     const res = await updateStatus(id, { status: 'declined' })
+    if (res.success) {
+      const newData = data.filter((item) => item._id != id)
+      setData(newData)
+      setModal(false)
+    }
+  }
+  const cancelledHandler = async (status) => {
+    const res = await updateStatus(id, { status })
     if (res.success) {
       const newData = data.filter((item) => item._id != id)
       setData(newData)
@@ -110,16 +119,22 @@ const ReservedCardModal = ({ setData, data, id, setModal }) => {
                           {vaccination &&
                             vaccination.map((url, index) => (
                               <img
+                                onClick={() => setSelectedLargeImage(url)}
                                 key={index}
                                 src={url}
-                                className="h-24 w-24 object-cover"
+                                className="h-24 w-24 cursor-zoom-in object-cover"
                               />
                             ))}
                         </div>
                       </div>
                     </div>
                   </div>
-                  <p className="p-2 text-lg">Balance: {formatTotal(total)}</p>
+                  <p className="p-2 text-lg">
+                    Down Payment: &#8369; {formatTotal(total / 2)}
+                  </p>
+                  <p className="p-2 text-lg">
+                    Balance: &#8369; {formatTotal(total / 2)}
+                  </p>
                   <div className="mt-4 flex justify-between gap-4 p-2">
                     <button
                       onClick={() => setModal(false)}
@@ -142,17 +157,34 @@ const ReservedCardModal = ({ setData, data, id, setModal }) => {
                         >
                           Mark as paid and Check-in
                         </button>
+                      ) : status == 'requested' ? (
+                        <>
+                          <button
+                            onClick={declineHandler}
+                            className="rounded-md bg-slate-500 px-4 py-2 text-white"
+                          >
+                            Decline
+                          </button>
+                          <button
+                            onClick={approveHandler}
+                            className="rounded-md bg-emerald-500 px-4 py-2 text-white"
+                          >
+                            Approve
+                          </button>
+                        </>
                       ) : (
-                        status == 'requested' && (
+                        status == 'request cancellation' && (
                           <>
                             <button
-                              onClick={declineHandler}
+                              onClick={() => cancelledHandler('reserved')}
                               className="rounded-md bg-slate-500 px-4 py-2 text-white"
                             >
                               Decline
                             </button>
                             <button
-                              onClick={approveHandler}
+                              onClick={() =>
+                                cancelledHandler('approve_cancellation')
+                              }
                               className="rounded-md bg-emerald-500 px-4 py-2 text-white"
                             >
                               Approve
@@ -162,6 +194,17 @@ const ReservedCardModal = ({ setData, data, id, setModal }) => {
                       )}
                     </div>
                   </div>
+                  {selectedLargeImage != null && (
+                    <div
+                      onClick={() => setSelectedLargeImage(null)}
+                      className="absolute top-0 left-0 flex h-full w-full cursor-zoom-out items-center justify-center"
+                    >
+                      <img
+                        className="z-50 max-h-imageLg w-imageLg bg-white object-cover"
+                        src={selectedLargeImage}
+                      />
+                    </div>
+                  )}
                 </ModalLayout>
               </>
             )

@@ -1,7 +1,7 @@
 import React from 'react'
 import ModalLayout from '../Layout/ModalLayout'
 import Link from 'next/link'
-const ConfirmReceiptModal = ({ total, channel, reference, name, status }) => {
+const ConfirmReceiptModal = ({ total, channel, reference, name }) => {
   return (
     <ModalLayout>
       <div>
@@ -11,7 +11,7 @@ const ConfirmReceiptModal = ({ total, channel, reference, name, status }) => {
             <div className="bg-slate-900 p-4 ">
               <p>Total Due</p>
               <p>Php {total}</p>
-              <p className="capitalize">Status: {status}</p>
+              <p className="capitalize">Status: Paid</p>
             </div>
           </div>
         </div>

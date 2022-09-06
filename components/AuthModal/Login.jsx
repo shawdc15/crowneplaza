@@ -3,6 +3,7 @@ import { CloseSvg } from '../Svg'
 import { authLogin } from '../../services/user.services'
 import { useAppContext } from '../../context/AppContext'
 import ModalLayout from '../Layout/ModalLayout'
+import Link from 'next/link'
 const Login = () => {
   const { state, dispatch } = useAppContext()
   const { error, isLoading } = state
@@ -58,12 +59,11 @@ const Login = () => {
                 className="my-2 rounded-md border border-slate-300 px-4 py-3 "
                 placeholder="Password"
               />
-              <p
-                onClick={forgotHandler}
-                className="cursor-pointer py-2 text-emerald-500 underline"
-              >
-                Forgot Password
-              </p>
+              <Link href="/customer/forgot_password" onClick={forgotHandler}>
+                <a className="cursor-pointer py-2 text-emerald-500 underline">
+                  Forgot Password
+                </a>
+              </Link>
               {!isLoading ? (
                 <button
                   type="submit"

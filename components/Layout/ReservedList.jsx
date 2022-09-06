@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Head from 'next/head'
-import { getReservationByStatus } from '../../services/reservation.services'
+import {
+  getReservationByStatus,
+  getAllReserved,
+} from '../../services/reservation.services'
 import { ReservedCardModal, RoleHeader } from '../../components'
 import moment from 'moment'
-const ReservedList = ({ role, status }) => {
+const ReservedList = ({ role, status, reserved }) => {
   const [data, setData] = useState()
   const selectedData = useRef()
   const [modal, setModal] = useState(false)
@@ -12,10 +15,18 @@ const ReservedList = ({ role, status }) => {
   const mounted = useRef()
   useEffect(() => {
     const load = async () => {
-      const { success, data } = await getReservationByStatus(status)
-      if (success) {
-        setData(data)
+      if (reserved) {
+        const { success, data } = await getAllReserved()
+        if (success) {
+          setData(data)
+        }
+      } else {
+        const { success, data } = await getReservationByStatus(status)
+        if (success) {
+          setData(data)
+        }
       }
+
       mounted.current = true
     }
     if (!mounted.current) {

@@ -1,73 +1,148 @@
 import React, { useState, useRef } from 'react'
-import Link from 'next/link'
-import { confirmationReceipt } from '../../services/receipt.services'
-const PaymentLayout = ({ mode, action, reason, total, id }) => {
-  const [accordion, setAccordion] = useState(0)
-  const [error, setError] = useState(false)
-  const [receipt, setReceipt] = useState(false)
-  const paymentMethodRef = useRef()
-  const cardHolderNameRef = useRef()
+const PaymentLayout = ({ mode, action, reason, total, id, isLoading }) => {
+  const [error, setError] = useState(null)
+  const [method, setMethod] = useState('Gcash')
 
+  const paymentHandler = async () => {
+    console.log('koko: ', reason)
+    let temp_error = null
+    const newData = null
+    if (method == 'Gcash') {
+      newData = {
+        receiptFor: gcashFullnameRef.current.value.trim(),
+        gcashNumber: phoneNumberRef.current.value.trim(),
+      }
+      if (newData.receiptFor.length == 0 || newData.gcashNumber.length == 0) {
+        temp_error = ['Please fill up the form']
+      }
+    } else {
+      newData = {
+        receiptFor: visaFullnameRef.current.value.trim(),
+        creditCardNumber: cardNumberRef.current.value.trim(),
+        expiryDate: expiryDateRef.current.value.trim(),
+        cvv: cvvRef.current.value.trim(),
+      }
+      if (
+        newData.receiptFor.length == 0 ||
+        newData.creditCardNumber.length == 0 ||
+        newData.expiryDate.length == 0 ||
+        newData.cvv.length == 0
+      ) {
+        temp_error = ['Please fill up the form']
+      }
+    }
+    newData = {
+      ...newData,
+      paymentMethod: method,
+      channel: method,
+      status: mode == 'confirmation' ? 'paid' : 'pending',
+      reason,
+      total:
+        mode == 'confirmation' ? total / 2 : total / 2 - (total / 2) * 0.05,
+      reservation_id: id,
+    }
+    // if (mode == 'confirmation') {
+    // end of validation
+    if (temp_error == null) {
+      action(newData)
+    }
+    setError(temp_error)
+  }
   const cardNumberRef = useRef()
+  const expiryDateRef = useRef()
+  const cvvRef = useRef()
+  const gcashFullnameRef = useRef()
+  const visaFullnameRef = useRef()
+  const phoneNumberRef = useRef()
 
-  const validateError = () => {
-    if (
-      !paymentMethodRef.current.value ||
-      !cardHolderNameRef.current.value ||
-      !cardNumberRef.current.value ||
-      !reason
-    ) {
-      return true
-    }
-    return false
+  const gcash = () => {
+    return (
+      <>
+        <input
+          type="number"
+          ref={phoneNumberRef}
+          className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
+          placeholder="Gcash Number"
+        />
+        <input
+          type="text"
+          ref={gcashFullnameRef}
+          className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
+          placeholder="Full Name"
+        />
+        {actionsBtn()}
+      </>
+    )
   }
-  const cancellationHandler = async () => {
-    const isError = validateError()
-    const newData = {
-      receiptFor: mode,
-      reason: reason,
-      paymentMethod: paymentMethodRef.current.value,
-      cardHolderName: cardHolderNameRef.current.value,
-      creditCardNumber: cardNumberRef.current.value,
-      channel: 'Credit Card',
-      reservation_id: id,
-      total: total,
-      status: mode == 'confirmation' ? 'paid' : 'refund',
-    }
-    if (!isError) {
-      setError(false)
-      action(newData)
-    } else {
-      setError(true)
-    }
+  const actionsBtn = () => {
+    return (
+      <>
+        {mode == 'confirmation' ? (
+          isLoading ? (
+            <button className=" my-2 w-full rounded-md bg-gray-900 p-3 text-slate-100 disabled:bg-slate-600">
+              ...
+            </button>
+          ) : (
+            <button
+              onClick={paymentHandler}
+              className=" my-2 w-full rounded-md bg-gray-900 p-3 text-slate-100 disabled:bg-slate-600"
+            >
+              Confirm Payment
+            </button>
+          )
+        ) : isLoading ? (
+          <button className=" my-2 w-full rounded-md bg-gray-900 p-3 text-slate-100 disabled:bg-slate-600">
+            ...
+          </button>
+        ) : (
+          <button
+            onClick={paymentHandler}
+            className=" my-2 w-full rounded-md bg-gray-900 p-3 text-slate-100 disabled:bg-slate-600"
+          >
+            Refund Payment
+          </button>
+        )}
+      </>
+    )
   }
-
-  const confirmationHandler = async () => {
-    const isError = validateError()
-    const newData = {
-      receiptFor: mode,
-      reason: reason,
-      paymentMethod: paymentMethodRef.current.value,
-      cardHolderName: cardHolderNameRef.current.value,
-      creditCardNumber: cardNumberRef.current.value,
-      channel: 'Credit Card',
-      reservation_id: id,
-      total: total,
-      status: mode == 'confirmation' ? 'paid' : 'refund',
-    }
-
-    if (!isError) {
-      setError(false)
-      action(newData)
-    } else {
-      setError(true)
-    }
+  const visa = () => {
+    return (
+      <>
+        <input
+          type="number"
+          ref={cardNumberRef}
+          className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
+          placeholder="Card Number"
+        />
+        <div>
+          <input
+            type="number"
+            ref={expiryDateRef}
+            className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
+            placeholder="Expiry Date (MM/YY)"
+          />
+          <input
+            type="number"
+            ref={cvvRef}
+            className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
+            placeholder="CVV"
+          />
+        </div>
+        <input
+          type="text"
+          ref={visaFullnameRef}
+          className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
+          placeholder="Name on Card"
+        />
+        {actionsBtn()}
+      </>
+    )
   }
   return (
     <div>
-      {error && (
+      {error && error.length > 0 && (
         <div className="mb-4 flex items-center justify-between rounded-md bg-rose-500 p-4 text-white transition-all delay-75">
-          <p>Please fill up the form!</p>
+          <p>{error[0]}</p>
           <span
             onClick={() => setError(false)}
             className="cursor-pointer text-white underline"
@@ -77,117 +152,34 @@ const PaymentLayout = ({ mode, action, reason, total, id }) => {
         </div>
       )}
       <div>
-        <p
-          className="cursor-pointer overflow-hidden bg-gray-200 p-4 text-slate-900"
-          onClick={() => (accordion == 1 ? setAccordion(0) : setAccordion(1))}
-        >
-          Credit/Debit Card
-        </p>
-        <div
-          className={` overflow-hidden transition-all ${
-            accordion == 0 ? 'h-0' : accordion == 1 ? 'h-auto' : 'h-0'
-          }`}
-        >
-          <input
-            ref={paymentMethodRef}
-            className="my-1 w-full rounded-md border border-slate-300 px-4 py-3"
-            type="text"
-            placeholder="Select payment method"
+        <div className="flex items-center gap-4 p-4 ">
+          <img
+            onClick={() => {
+              if (cardNumberRef.current?.value != null) {
+                cardNumberRef.current.value = ''
+              }
+              setMethod('Gcash')
+            }}
+            src={'/gcash.png'}
+            className={`aspect-video h-24 rounded-md border-2 ${
+              method == 'Gcash' && 'border-emerald-500'
+            }`}
           />
-          <input
-            ref={cardHolderNameRef}
-            className="my-1 w-full rounded-md border border-slate-300 px-4 py-3"
-            type="text"
-            placeholder="Card Holder Name"
-          />
-          <input
-            ref={cardNumberRef}
-            className="my-1 w-full rounded-md border border-slate-300 px-4 py-3"
-            type="number"
-            placeholder="Credit/Card Number"
+          <img
+            onClick={() => {
+              if (phoneNumberRef.current?.value != null) {
+                phoneNumberRef.current.value = ''
+              }
+
+              setMethod('Visa')
+            }}
+            src={'/visa.png'}
+            className={`aspect-video h-24 rounded-md border-2 ${
+              method == 'Visa' && 'border-emerald-500'
+            } bg-white p-4`}
           />
         </div>
-      </div>
-      <div>
-        <p
-          className="cursor-pointer overflow-hidden bg-gray-200 p-4 text-slate-900"
-          onClick={() => (accordion == 2 ? setAccordion(0) : setAccordion(2))}
-        >
-          E-Wallet/Digital Payment
-        </p>
-        {/* <div
-          className={`overflow-hidden transition-all ${
-            accordion == 0 ? 'h-0' : accordion == 2 ? 'h-auto' : 'h-0'
-          }`}
-        >
-          <input
-            className="my-1 w-full rounded-md border border-slate-300 px-4 py-3"
-            type="text"
-            placeholder="Select payment method"
-          />
-          <input
-            className="my-1 w-full rounded-md border border-slate-300 px-4 py-3"
-            type="text"
-            placeholder="Card Holder Name"
-          />
-          <input
-            className="my-1 w-full rounded-md border border-slate-300 px-4 py-3"
-            type="text"
-            placeholder="Credit/Number Card Number"
-          />
-        </div> */}
-      </div>
-      <div>
-        <p
-          className="cursor-pointer overflow-hidden bg-gray-200 p-4 text-slate-900"
-          onClick={() => (accordion == 3 ? setAccordion(0) : setAccordion(3))}
-        >
-          Counter Payment
-        </p>
-        {/* <div
-          className={`overflow-hidden transition-all ${
-            accordion == 0 ? 'h-0' : accordion == 3 ? 'h-auto' : 'h-0'
-          }`}
-        >
-          <input
-            className="my-1 w-full rounded-md border border-slate-300 px-4 py-3"
-            type="text"
-            placeholder="Select payment method"
-          />
-          <input
-            className="my-1 w-full rounded-md border border-slate-300 px-4 py-3"
-            type="text"
-            placeholder="Card Holder Name"
-          />
-          <input
-            className="my-1 w-full rounded-md border border-slate-300 px-4 py-3"
-            type="text"
-            placeholder="Credit/Number Card Number"
-          />
-        </div> */}
-      </div>
-      <div className="mt-4 flex items-center justify-end gap-4">
-        {mode != 'confirmation' && (
-          <Link
-            href={
-              mode != 'cancel'
-                ? '/customer/reservation'
-                : '/customer/accommodation'
-            }
-          >
-            <button className="my-2 rounded-md bg-slate-200 px-4 py-4 text-slate-900 disabled:bg-slate-600">
-              Back
-            </button>
-          </Link>
-        )}
-        <button
-          onClick={
-            mode == 'confirmation' ? confirmationHandler : cancellationHandler
-          }
-          className="my-2 rounded-md bg-gray-900 px-4 py-4 text-slate-100 disabled:bg-slate-600"
-        >
-          Proceed
-        </button>
+        <div className="px-4">{method == 'Gcash' ? gcash() : visa()}</div>
       </div>
     </div>
   )

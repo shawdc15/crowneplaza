@@ -4,7 +4,7 @@ import { CancelledList } from '../../../components'
 const Cancelled = () => {
   return (
     <>
-      <CancelledList role={'manager'} status="cancelled" />
+      <CancelledList role={'manager'} status="request cancellation" />
     </>
   )
 }

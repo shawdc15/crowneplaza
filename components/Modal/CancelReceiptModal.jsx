@@ -2,14 +2,7 @@ import React from 'react'
 import ModalLayout from '../Layout/ModalLayout'
 import Link from 'next/link'
 
-const CancelReceiptModal = ({
-  total,
-  channel,
-  reference,
-  name,
-  status,
-  closeAction,
-}) => {
+const CancelReceiptModal = ({ total, channel, reference, name }) => {
   return (
     <ModalLayout>
       <div>
@@ -19,7 +12,7 @@ const CancelReceiptModal = ({
             <div className="bg-slate-900 p-4 ">
               <p className="">Total Due</p>
               <p>Php {total}</p>
-              <p className="capitalize">Status: {status}</p>
+              <p className="capitalize">Status: Pending</p>
             </div>
           </div>
         </div>

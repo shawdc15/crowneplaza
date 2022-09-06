@@ -5,7 +5,10 @@ import moment from 'moment'
 import { getOneActiveAccommodation } from '../../services/accommodation.services'
 import { Footer } from '../../components'
 import { useAppContext } from '../../context/AppContext'
-import { addReservation } from '../../services/reservation.services'
+import {
+  addReservation,
+  getAvailableRooms,
+} from '../../services/reservation.services'
 import { getActiveVoucher } from '../../services/voucher.services'
 import { BackSvg } from '../../components/Svg'
 import { useRouter } from 'next/router'
@@ -63,6 +66,7 @@ const BookCard = ({ id, children, role }) => {
       purposeOfStay: purposeOfStayRef.current?.value,
       remarks: remarksRef.current?.value,
       user_id: state.user?._id,
+      email: state.user?.email,
       accomodation_id: id,
       status: role == 'customer' ? 'requested' : 'reserved',
       preferredRoom: roomRef.current?.value,
@@ -127,13 +131,13 @@ const BookCard = ({ id, children, role }) => {
       const { success, data } = await getOneActiveAccommodation(id)
       const res = await getActiveVoucher()
       if (res.success) {
-        console.log(res.data)
+        // console.log(res.data)
         setVoucherData(res.data)
       }
       if (success) {
         setTotal(data.price)
         setData(data)
-        console.log(data)
+        // console.log(data)
       }
       if (id) {
         mounted.current = true
@@ -143,18 +147,32 @@ const BookCard = ({ id, children, role }) => {
       load()
     }
   })
-
+  const [avail, setAvail] = useState(data?.roomNo)
+  const filteredRoom = data?.roomNo.filter((val) => !avail?.includes(val))
   const formatTotal = (x = 0) => {
     const xx = parseFloat(x).toFixed(2)
     return xx.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   }
-  const stayInHandler = (mode, value) => {
-    const start = moment(mode == 'start' ? value : checkIn, 'YYYY-MM-DD')
-    const end = moment(mode == 'end' ? value : checkOut, 'YYYY-MM-DD')
+  const stayInHandler = async (mode, value) => {
+    const start_raw = mode == 'start' ? value : checkIn
+    const end_raw = mode == 'end' ? value : checkOut
+    const start = moment(start_raw, 'YYYY-MM-DD')
+    const end = moment(end_raw, 'YYYY-MM-DD')
     const diff = moment.duration(end.diff(start)).asDays()
     diffRef.current = diff
     if (diff) {
       discountHandler()
+    }
+    const verifier = {
+      checkIn: start_raw,
+      checkOut: end_raw,
+      accomodation_id: id,
+    }
+    if (start_raw && end_raw) {
+      console.log(verifier)
+      const available_room = await getAvailableRooms(verifier)
+      setAvail(available_room.data)
+      console.log(available_room.data)
     }
   }
 
@@ -183,7 +201,16 @@ const BookCard = ({ id, children, role }) => {
     }
     console.log(selectedVoucherRef.current)
   }
-
+  const removeImageHandler = (id) => {
+    let temp_image = []
+    for (let i = 0; i < arrayOfVaccination.length; i++) {
+      if (id != i) {
+        console.log(i)
+        temp_image.push(arrayOfVaccination[i])
+      }
+    }
+    setArrayOfVaccination(temp_image)
+  }
   return (
     <>
       <Head>
@@ -258,8 +285,8 @@ const BookCard = ({ id, children, role }) => {
                       <label htmlFor="checkIn">Check In</label>
                       <input
                         onChange={(e) => {
-                          setCheckIn(e.target.value)
                           stayInHandler('start', e.target.value)
+                          setCheckIn(e.target.value)
                         }}
                         min={moment().format('YYYY-MM-DD')}
                         className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
@@ -271,8 +298,8 @@ const BookCard = ({ id, children, role }) => {
                       <label htmlFor="checkOut">Check Out</label>
                       <input
                         onChange={(e) => {
-                          setCheckOut(e.target.value)
                           stayInHandler('end', e.target.value)
+                          setCheckOut(e.target.value)
                         }}
                         min={moment(checkIn)
                           .add(1, 'days')
@@ -289,7 +316,7 @@ const BookCard = ({ id, children, role }) => {
                         className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
                         id="room"
                       >
-                        {data?.roomNo.map((roomNo, index) => (
+                        {filteredRoom.map((roomNo, index) => (
                           <option key={index} value={roomNo}>
                             {roomNo}
                           </option>
@@ -409,31 +436,38 @@ const BookCard = ({ id, children, role }) => {
                       <label htmlFor="id">
                         Vaccinations cards and valid IDs for each guest
                       </label>
-                      <input
-                        className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
-                        type="file"
-                        id="id"
-                        onChange={(e) => {
-                          setArrayOfVaccination([
-                            ...arrayOfVaccination,
-                            {
-                              url: URL.createObjectURL(e.target.files[0]),
-                              file: e.target.files[0],
-                            },
-                          ])
-                          // console.log(e.target.files[0])
-                        }}
-                        accept="image/*"
-                      />
+                      <p>Note: Maximum of 10 uploads</p>
+                      {arrayOfVaccination.length < 10 && (
+                        <input
+                          className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
+                          type="file"
+                          id="id"
+                          onChange={(e) => {
+                            setArrayOfVaccination([
+                              ...arrayOfVaccination,
+                              {
+                                url: URL.createObjectURL(e.target.files[0]),
+                                file: e.target.files[0],
+                              },
+                            ])
+                          }}
+                          accept="image/*"
+                        />
+                      )}
                     </div>
                     <div></div>
                     <div className="col-span-2 flex flex-wrap gap-4">
                       {arrayOfVaccination.map(({ url }, index) => (
-                        <img
+                        <div
                           key={index}
-                          src={url}
-                          className="h-24 w-24 object-cover"
-                        />
+                          className="relative   bg-slate-900/40 "
+                          onClick={() => removeImageHandler(index)}
+                        >
+                          <div className="absolute z-50 flex h-full w-full cursor-pointer items-center justify-center bg-slate-700/50 p-2 text-center font-semibold text-white">
+                            <span className="text-md">Remove</span>
+                          </div>
+                          <img src={url} className="h-24 w-24 object-cover" />
+                        </div>
                       ))}
                     </div>
                   </div>

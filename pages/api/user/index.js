@@ -72,9 +72,19 @@ export default async (req, res) => {
           res.status(201).json({ success: true, data: user })
         } catch (error) {
           console.log(error)
-          const err = error.errors
           if (error.code === 11000) {
-            newError = { ...newError, usernameError: 'Username already exist!' }
+            if (error.keyPattern?.username) {
+              newError = {
+                ...newError,
+                usernameError: 'Username already exist!',
+              }
+            }
+            if (error.keyPattern?.email) {
+              newError = {
+                ...newError,
+                emailError: 'Email address already exist!',
+              }
+            }
           }
           res.status(400).json({
             success: false,

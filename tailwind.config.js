@@ -16,6 +16,7 @@ module.exports = {
       },
       width: {
         icon: '40px',
+        imageLg: 'calc(100% - 50px)',
       },
       minWidth: {
         card: '300px',
@@ -24,12 +25,14 @@ module.exports = {
         card: '300px',
         container: '1300px',
         modal: '800px',
+        cardMd: '400px',
       },
       minHeight: {
         card: '250px',
       },
       maxHeight: {
         card: '250px',
+        imageLg: 'calc(100% - 50px)',
       },
       height: {
         carouselImage: '700px',

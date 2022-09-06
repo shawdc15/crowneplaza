@@ -13,20 +13,27 @@ import {
   updateStatus,
 } from '../../../../services/reservation.services'
 import { getPaymentById } from '../../../../services/payment.services'
-import { postCancellationReceipt } from '../../../../services/receipt.services'
+import {
+  postCancellationReceipt,
+  sendReceipt,
+} from '../../../../services/receipt.services'
 const Reservation = () => {
   const router = useRouter()
   const [modal, setModal] = useState()
   const id = router.query.id
   const [data, setData] = useState()
   const [modalData, setModalData] = useState()
-  const [reason, setReason] = useState()
+  const [reason, setReason] = useState('Mistake in details')
   const mounted = useRef()
   useEffect(() => {
     const load = async () => {
       const { success, data } = await getPaymentById(id)
       if (success) {
         setData(data)
+        if (data.status == 'request cancellation') {
+          router.push('/customer/reservation')
+        }
+        console.log(reason)
         console.log(data)
       }
     }
@@ -40,37 +47,51 @@ const Reservation = () => {
   })
   const reasonList = [
     {
-      id: 'r1',
-      description: 'Reason 1',
+      description: 'Family/Personal emergency',
+      selected: false,
     },
     {
-      id: 'r2',
-      description: 'Reason 2',
+      description: 'Illness',
+      selected: false,
     },
     {
-      id: 'r3',
-      description: 'Reason 3',
+      description: 'Travel Plans changed',
+      selected: false,
     },
     {
-      id: 'r4',
-      description: 'Reason 4',
+      description: 'Bad weather/ Natural disaster',
+      selected: false,
     },
     {
-      id: 'r5',
-      description: 'Reason 5',
+      description: 'I changed my mind',
+      selected: false,
     },
     {
-      id: 'r6',
-      description: 'Reason 6',
+      description: 'Mistake in details',
+      selected: true,
     },
   ]
-  const submitHandler = async (data) => {
+  const submitHandler = async (receiptData) => {
     const newData = {
       status: 'request cancellation',
     }
     const update_res = await updateStatus(id, newData)
     if (update_res.success) {
-      const res = await postCancellationReceipt(data)
+      const res = await postCancellationReceipt(receiptData)
+      console.log({
+        ...receiptData,
+        reference: res?.data._id,
+        subject: 'cancellation',
+        name: data?.name,
+        email: data?.email,
+      })
+      const result = await sendReceipt({
+        ...receiptData,
+        reference: res?.data._id,
+        subject: 'cancellation',
+        name: data?.name,
+        email: data?.email,
+      })
       if (res.success) {
         setModalData(res.data)
       }
@@ -89,7 +110,7 @@ const Reservation = () => {
           total={modalData?.total}
           channel={modalData?.channel}
           reference={modalData?._id}
-          name={modalData?.cardHolderName}
+          name={data?.name}
           status="pending"
         />
       )}
@@ -101,13 +122,14 @@ const Reservation = () => {
           <div>
             <p className="py-2">Reason why will you cancel your reservation?</p>
             <div className="mb-4 grid grid-cols-1 p-2 lg:grid-cols-2">
-              {reasonList.map(({ id, description }, index) => (
+              {reasonList.map(({ id, description, selected }, index) => (
                 <div key={index} className="my-2 flex items-center gap-2">
                   <input
                     onClick={(e) => setReason(description)}
                     id={id}
                     type="radio"
                     name="reason"
+                    defaultChecked={selected}
                   />
                   <label htmlFor={id}>{description}</label>
                 </div>

@@ -81,3 +81,27 @@ export const getReservationById = async (id) => {
   const result = await res.json()
   return result
 }
+export const getAllReserved = async () => {
+  const res = await fetch(`/api/reservation/status/reserved`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+  const result = await res.json()
+  return result
+}
+
+export const getAvailableRooms = async (newData) => {
+  const res = await fetch(`/api/reservation/available`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newData),
+  })
+  const result = await res.json()
+  return result
+}
