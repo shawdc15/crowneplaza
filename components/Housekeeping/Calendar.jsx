@@ -25,7 +25,6 @@ const Calendar = () => {
     }
     const { success, data } = await getByDate(newData.date)
     if (success) {
-      console.log(data)
       setData(data)
     }
   }, [])
@@ -75,7 +74,6 @@ const Calendar = () => {
                 <button
                   onClick={() => {
                     idRef.current = _id
-                    console.log(_id)
 
                     eventRef.current = { ...eventRef.current, value: event }
                     setModalMode('update')
