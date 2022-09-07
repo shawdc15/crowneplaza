@@ -46,3 +46,5 @@ export { default as RoomRecord } from './Housekeeping/RoomRecord'
 export { default as Calendar } from './Housekeeping/Calendar'
 export { default as Housekeeping } from './Housekeeping/Housekeeping'
 export { default as CancelledList } from './Layout/CancelledList'
+
+export { default as CalendarModal } from './Modal/CalendarModal'

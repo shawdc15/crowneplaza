@@ -64,6 +64,10 @@ const ReservedList = ({ role, status, reserved }) => {
             <option value="preferredRoom">Room No</option>
           </select>
         </div>
+        <p className="mt-10 p-2 text-lg font-semibold">
+          Record: {searchResult?.length || 0}
+        </p>
+
         <div className="mt-5 grid  grid-cols-1 gap-6 lg:grid-cols-2">
           {searchResult &&
             searchResult.map(

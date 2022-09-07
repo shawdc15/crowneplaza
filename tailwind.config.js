@@ -33,6 +33,7 @@ module.exports = {
       maxHeight: {
         card: '250px',
         imageLg: 'calc(100% - 50px)',
+        note: '600px',
       },
       height: {
         carouselImage: '700px',
