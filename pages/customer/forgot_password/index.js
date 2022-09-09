@@ -26,7 +26,7 @@ const forgotPassword = () => {
           email: email,
           subject: 'reset_password',
           fullname: `${result.data[0].firstName} ${result.data[0].lastName}`,
-          link: `http://localhost:3000/customer/forgot_password/${result.data[0]._id}`,
+          link: `https://crowne-plaza.herokuapp.com/customer/forgot_password/${result.data[0]._id}`,
         }
         const request = await sendPasswordLink(newData)
         // console.log(request)

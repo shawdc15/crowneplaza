@@ -25,7 +25,7 @@ async function sendEmail(req, res) {
   try {
     await sendgrid.send({
       to: email, // Your email where you'll receive emails
-      from: 'negretemarvilean@gmail.com', // your website email address here
+      from: 'yourcrowneplaza@gmail.com', // your website email address here
       subject: sub,
       html: finalHtml,
     })

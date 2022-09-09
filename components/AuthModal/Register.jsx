@@ -21,10 +21,10 @@ const Register = () => {
     dispatch({ type: 'REGISTER_REQUEST' })
     e.preventDefault()
     const credentials = {
-      username: usernameRef.current.value,
-      email: emailRef.current.value,
-      contact: contactRef.current.value,
-      age: ageRef.current.value,
+      username: usernameRef.current.value.trim(),
+      email: emailRef.current.value.trim(),
+      contact: contactRef.current.value.trim(),
+      age: ageRef.current.value.trim(),
       password: passwordRef.current.value,
       lastName: lastNameRef.current.value,
       firstName: firstNameRef.current.value,
