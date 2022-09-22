@@ -32,7 +32,6 @@ const ReservedList = ({ role, status, reserved }) => {
     if (!mounted.current) {
       load()
     }
-    console.log(modal)
   })
 
   const searchResult = data?.filter((d) =>

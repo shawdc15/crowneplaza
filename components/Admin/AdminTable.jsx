@@ -44,14 +44,11 @@ const AdminTable = ({
     }
   }
   const searchHandler = (e) => {
-    // setData(adminSearches(searchKey, data_items, e.target.value))
     setSearch(e.target.value)
-    console.log(e.target.value)
   }
   const filteredData = data_items?.filter((item) =>
     item[searchKey]?.includes(search)
   )
-  console.log(data_items)
   return (
     <>
       <div>
@@ -133,7 +130,7 @@ const AdminTable = ({
                           ? item[key]?.join(',')
                           : key == 'customerName'
                           ? item['name']
-                          : key == 'date'
+                          : key == 'date' || key == 'created_at'
                           ? moment(item[key]).format('YYYY-MM-DD')
                           : item[key]}
                       </td>

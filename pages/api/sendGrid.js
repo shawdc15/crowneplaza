@@ -30,7 +30,6 @@ async function sendEmail(req, res) {
       html: finalHtml,
     })
   } catch (error) {
-    console.log(error.response.body.errors)
     return res
       .status(error.statusCode || 500)
       .json({ success: false, error: error.message })

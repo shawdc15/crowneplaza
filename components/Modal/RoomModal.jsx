@@ -57,7 +57,6 @@ const RoomModal = ({ setModal, mode }) => {
       note: noteRef.current?.value,
       image: imageUrlRef?.current || state.adminModalData?.image,
     }
-    console.log(newData)
     if (mode === 'add') {
       const res = await createAccommodation(newData)
       if (res.success) {
@@ -139,7 +138,6 @@ const RoomModal = ({ setModal, mode }) => {
       setDisabled(false)
     }
     setError(tempError)
-    console.log(Object.keys(tempError)?.length)
     if (Object.keys(tempError)?.length == 0) {
       if (imageUpload) {
         uploadFile()

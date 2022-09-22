@@ -53,11 +53,9 @@ const SupervisorModal = ({ setModal, mode }) => {
         sector: sectorRef.current.value,
         shift: shiftRef.current.value,
       }
-      console.log(newData)
       if (mode === 'add') {
         const res = await createStaff(newData)
         if (res.success) {
-          console.log(res.data)
           dispatch({
             type: 'SET_SELECTED_DATA',
             value: [...state.selectedData, res.data],
@@ -65,7 +63,6 @@ const SupervisorModal = ({ setModal, mode }) => {
 
           setModal(false)
         } else {
-          console.log(res.errors)
           setError(res.errors)
         }
       } else {

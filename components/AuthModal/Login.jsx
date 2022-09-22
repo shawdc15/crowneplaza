@@ -10,9 +10,6 @@ const Login = () => {
 
   const usernameRef = useRef()
   const passwordRef = useRef()
-  const forgotHandler = () => {
-    console.log('forgot')
-  }
   const loginHandler = async (e) => {
     dispatch({ type: 'LOGIN_REQUEST' })
     e.preventDefault()
@@ -26,7 +23,6 @@ const Login = () => {
         dispatch({ type: 'LOGIN_ERROR', value: { ...errors } })
       } else {
         dispatch({ type: 'LOGIN_SUCCESS', value: data })
-        console.log(data)
       }
     }, 1000)
   }
@@ -59,7 +55,7 @@ const Login = () => {
                 className="my-2 rounded-md border border-slate-300 px-4 py-3 "
                 placeholder="Password"
               />
-              <Link href="/customer/forgot_password" onClick={forgotHandler}>
+              <Link href="/customer/forgot_password">
                 <a className="cursor-pointer py-2 text-emerald-500 underline">
                   Forgot Password
                 </a>

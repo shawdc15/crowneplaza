@@ -25,7 +25,6 @@ const CalendarModal = ({
       if (res.success) {
         setMode('')
         setData([...data, res.data])
-        console.log(data)
       }
     }
   }
@@ -35,12 +34,9 @@ const CalendarModal = ({
         event: eventRef.current.value,
         date: date,
       }
-      console.log('id', id)
-      console.log('newData', newData)
 
       const res = await updateById(newData, id)
       if (res.success) {
-        console.log(res)
         let temp = []
         for (let i of data) {
           if (i._id == id) {
@@ -48,7 +44,6 @@ const CalendarModal = ({
           }
           temp.push(i)
         }
-        console.log(temp)
         setData(temp)
         setMode('')
       }
@@ -59,14 +54,12 @@ const CalendarModal = ({
     const res = await deleteById(id)
     if (res.success) {
       setMode('')
-      console.log(res)
       let temp = []
       for (let i of data) {
         if (i._id != id) {
           temp.push(i)
         }
       }
-      console.log(temp)
       setData(temp)
     }
   }

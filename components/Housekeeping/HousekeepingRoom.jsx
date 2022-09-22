@@ -14,7 +14,6 @@ const HousekeepingRoom = ({ id }) => {
       const { success, data } = await getOneActiveAccommodation(id)
       if (success) {
         setData(data)
-        console.log(data)
       }
       if (id) {
         mounted.current = true

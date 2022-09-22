@@ -17,9 +17,9 @@ import {
   postCancellationReceipt,
   sendReceipt,
 } from '../../../../services/receipt.services'
-const Reservation = () => {
+const CancelReservation = () => {
   const router = useRouter()
-  const [modal, setModal] = useState()
+  const [isLoading, setIsLoading] = useState(false)
   const id = router.query.id
   const [data, setData] = useState()
   const [modalData, setModalData] = useState()
@@ -30,11 +30,10 @@ const Reservation = () => {
       const { success, data } = await getPaymentById(id)
       if (success) {
         setData(data)
+        console.log(data)
         if (data.status == 'request cancellation') {
           router.push('/customer/reservation')
         }
-        console.log(reason)
-        console.log(data)
       }
     }
     if (!mounted.current) {
@@ -43,7 +42,6 @@ const Reservation = () => {
     if (id) {
       mounted.current = true
     }
-    console.log('refresh')
   })
   const reasonList = [
     {
@@ -72,19 +70,15 @@ const Reservation = () => {
     },
   ]
   const submitHandler = async (receiptData) => {
+    setIsLoading(true)
     const newData = {
       status: 'request cancellation',
     }
+    console.log(receiptData)
     const update_res = await updateStatus(id, newData)
     if (update_res.success) {
       const res = await postCancellationReceipt(receiptData)
-      console.log({
-        ...receiptData,
-        reference: res?.data._id,
-        subject: 'cancellation',
-        name: data?.name,
-        email: data?.email,
-      })
+
       const result = await sendReceipt({
         ...receiptData,
         reference: res?.data._id,
@@ -96,6 +90,7 @@ const Reservation = () => {
         setModalData(res.data)
       }
     }
+    setIsLoading(false)
   }
   return (
     <>
@@ -147,6 +142,10 @@ const Reservation = () => {
           <PaymentLayout
             mode="cancellation"
             action={submitHandler}
+            metaData={{
+              roomType: data?.roomType,
+              preferredRoom: data?.preferredRoom,
+            }}
             reason={reason}
             total={data?.total}
             id={data?._id}
@@ -158,4 +157,4 @@ const Reservation = () => {
   )
 }
 
-export default Reservation
+export default CancelReservation

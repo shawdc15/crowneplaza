@@ -10,7 +10,6 @@ const TaskReports = () => {
   const [data, setData] = useState()
   useEffect(async () => {
     const { success, data } = await getAllCalendar()
-    console.log(data)
     if (success) {
       setData(data)
     }

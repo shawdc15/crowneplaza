@@ -8,7 +8,6 @@ const ReservationReports = () => {
   useEffect(async () => {
     const res = await reservationReports()
     if (res.success) {
-      console.log(res)
       setData(res?.data)
     }
   }, [])

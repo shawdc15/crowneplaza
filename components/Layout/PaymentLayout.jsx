@@ -12,7 +12,6 @@ const PaymentLayout = ({
   const [method, setMethod] = useState('Gcash')
 
   const paymentHandler = async () => {
-    console.log('koko: ', reason)
     let temp_error = null
     const newData = null
     if (method == 'Gcash') {
@@ -52,6 +51,7 @@ const PaymentLayout = ({
     }
     // if (mode == 'confirmation') {
     // end of validation
+    console.log(newData)
     if (temp_error == null) {
       action(newData)
     }

@@ -19,7 +19,6 @@ const ReservedList = ({ role, status }) => {
         setData(data)
         const receipt_result = await getAllReceipt(status)
         const reservationIdList = data.map((d) => d._id)
-        console.log(reservationIdList)
         let tmp
         if (receipt_result) {
           tmp = receipt_result.data?.filter(
@@ -35,7 +34,6 @@ const ReservedList = ({ role, status }) => {
     if (!mounted.current) {
       load()
     }
-    console.log(modal)
   })
 
   const searchResult = data?.filter((d) =>
@@ -47,7 +45,7 @@ const ReservedList = ({ role, status }) => {
   return (
     <>
       <Head>
-        <title>Reserved List | Crowné Plaza</title>
+        <title>Cancelled List | Crowné Plaza</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <RoleHeader active="cancelled" role={role} />

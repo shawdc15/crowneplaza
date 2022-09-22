@@ -57,7 +57,6 @@ const Register = () => {
       if (errors) {
         dispatch({ type: 'REGISTER_ERROR', value: { ...errors } })
       } else {
-        console.log('success')
         dispatch({ type: 'REGISTER_SUCCESS' })
       }
     }, 1000)

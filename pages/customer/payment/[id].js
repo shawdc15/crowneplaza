@@ -40,7 +40,6 @@ const Payment = () => {
   })
   const paymentHandler = async (receiptData) => {
     setIsLoading(true)
-    console.log(receiptData)
     const newData = {
       status: 'reserved',
     }

@@ -13,7 +13,6 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
     const res = await getReservationById(id)
     if (res.success) {
       setSelectedData([res.data])
-      console.log(res.data)
     }
   }, [])
   const formatTotal = (x = 0) => {
@@ -63,7 +62,6 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
   const receiptHandler = (id) => {
     for (let r in receipt) {
       if (receipt[r].reservation_id == id) {
-        console.log(receipt[r].reason)
         return receipt[r].reason
       }
     }
@@ -124,7 +122,7 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
                         {receipt && <p>Reason: {receiptHandler(_id)}</p>}
                       </div>
                       <div>
-                        <div className="flex flex-wrap gap-4">
+                        <div className="mx-2 flex flex-wrap gap-4">
                           {vaccination &&
                             vaccination.map((url, index) => (
                               <img
@@ -138,12 +136,24 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
                       </div>
                     </div>
                   </div>
-                  <p className="p-2 text-lg">
-                    Down Payment: &#8369; {formatTotal(total / 2)}
-                  </p>
-                  <p className="p-2 text-lg">
-                    Balance: &#8369; {formatTotal(total / 2)}
-                  </p>
+                  {status != 'request cancellation' && status != 'checkedIn' ? (
+                    <>
+                      <p className="p-2 text-lg">
+                        Down Payment: &#8369; {formatTotal(total / 2)}
+                      </p>
+                      <p className="p-2 text-lg">
+                        Balance: &#8369; {formatTotal(total / 2)}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="p-2 text-lg">
+                      Total Paid: &#8369; {formatTotal(total)}
+                    </p>
+                  )}
+                  <textarea
+                    placeholder="Indicate the reason why you decline"
+                    className="mx-2 w-full rounded-md border border-slate-300 p-2"
+                  ></textarea>
                   <div className="mt-4 flex justify-between gap-4 p-2">
                     <button
                       onClick={() => setModal(false)}

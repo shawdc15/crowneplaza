@@ -31,7 +31,7 @@ const Cancellation = () => {
 
     {
       name: 'Room No',
-      key: 'roomNo',
+      key: 'preferredRoom',
     },
     {
       name: 'Room Type',

@@ -18,7 +18,6 @@ const HouseKeeping = ({ role }) => {
       date: moment().format('YYYY-MM-DD'),
     })
     if (success) {
-      console.log(data)
       setData(data)
     }
   }, [])

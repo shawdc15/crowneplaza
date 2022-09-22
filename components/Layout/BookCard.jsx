@@ -73,7 +73,6 @@ const BookCard = ({ id, children, role }) => {
       total: total,
       vaccination: arrayOfVaccinationRef?.current,
     }
-    console.log(newData)
     const res = await addReservation(newData)
     if (res.success) {
       setSuccess(false)
@@ -92,7 +91,6 @@ const BookCard = ({ id, children, role }) => {
     if (role == 'customer' && !state.isAuth) {
       dispatch({ type: 'OPEN_LOGIN_MODAL' })
     } else {
-      console.log(data?.maxAdult)
       if (
         (arrayOfVaccination.length > 0 &&
           diffRef.current > 0 &&
@@ -107,7 +105,6 @@ const BookCard = ({ id, children, role }) => {
           childrenRef.current?.value <= data?.maxChildren)
       ) {
         setLoading(true)
-        console.log('valid', diffRef?.current)
         uploadFile()
       } else {
         setSuccess(true)
@@ -136,13 +133,11 @@ const BookCard = ({ id, children, role }) => {
       const { success, data } = await getOneActiveAccommodation(id)
       const res = await getActiveVoucher()
       if (res.success) {
-        // console.log(res.data)
         setVoucherData(res.data)
       }
       if (success) {
         setTotal(data.price)
         setData(data)
-        // console.log(data)
       }
       if (id) {
         mounted.current = true
@@ -174,10 +169,8 @@ const BookCard = ({ id, children, role }) => {
       accomodation_id: id,
     }
     if (start_raw && end_raw) {
-      console.log(verifier)
       const available_room = await getAvailableRooms(verifier)
       setAvail(available_room.data)
-      console.log(available_room.data)
     }
   }
 
@@ -186,7 +179,6 @@ const BookCard = ({ id, children, role }) => {
     let overall = 0
     let x = data?.price * diffRef.current + beds * 1000
     if (selectedVoucherRef.current) {
-      console.log('test2')
       discount = parseInt(selectedVoucherRef.current?.discount)
       overall = x - discount
       if (selectedVoucherRef.current?.discount_type == 'Percent') {
@@ -197,20 +189,17 @@ const BookCard = ({ id, children, role }) => {
       selectedVoucherRef.current = null
       setTotal(x)
     } else {
-      console.log('dito')
       selectedVoucherRef.current = {
         ...selectedVoucherRef.current,
         newDiscount: discount,
       }
       setTotal(x - discount)
     }
-    console.log(selectedVoucherRef.current)
   }
   const removeImageHandler = (id) => {
     let temp_image = []
     for (let i = 0; i < arrayOfVaccination.length; i++) {
       if (id != i) {
-        console.log(i)
         temp_image.push(arrayOfVaccination[i])
       }
     }

@@ -28,7 +28,6 @@ const RoomRecord = ({ role }) => {
         const res = await checkHousekeeping(newData)
         if (res.success) {
           setData(res.data[0])
-          console.log(res.data[0])
           setIsLoading(false)
         } else {
           router.push('/404')
@@ -111,9 +110,7 @@ const RoomRecord = ({ role }) => {
       newData['roomStatus'] = temp['roomStatus']
       newData['reservationStatus'] = temp['reservationStatus']
       newData['verifiedBy'] = 'John Doe'
-      // newData['cleaner'] = 'Nikita'
     }
-    // console.log(newData)
     const url = {
       roomNo: id.split('-')[1],
       roomName: id.split('-')[0],
@@ -126,7 +123,6 @@ const RoomRecord = ({ role }) => {
       cleaner: temp['cleaner'],
       verifiedBy: 'John Doe',
     }
-    console.log(newLogs)
     const { success, data } = await addCalendarData(newData)
     if (success) {
       setData(data)

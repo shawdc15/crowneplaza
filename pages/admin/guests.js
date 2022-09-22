@@ -33,7 +33,6 @@ const Guests = () => {
   useEffect(async () => {
     dispatch({ type: 'CLEAR_SELECTED_DATA' })
     const { success, data } = await getGuestList()
-    console.log(data)
     if (success) {
       dispatch({ type: 'SET_SELECTED_DATA', value: data })
     }

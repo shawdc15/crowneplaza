@@ -9,7 +9,6 @@ import {
 } from '../../components'
 
 const AdminModalManager = ({ modalType, setModal, mode }) => {
-  // console.log(modalType)
   const modal = () => {
     switch (modalType) {
       case 'Voucher':
