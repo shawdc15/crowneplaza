@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import { AdminMain } from '../../components'
-
+import { getLogs } from '../../services/logreport.services'
 const CleanerReports = () => {
   const [data, setData] = useState()
   useEffect(async () => {
@@ -13,11 +13,11 @@ const CleanerReports = () => {
   const data_headers = [
     {
       name: 'ID No#',
-      key: 'reservation_id',
+      key: '_id',
     },
     {
       name: 'Date',
-      key: 'created_at',
+      key: 'date',
     },
     {
       name: 'Cleaner',
@@ -43,6 +43,7 @@ const CleanerReports = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AdminMain
+        searchKey="reservationStatus"
         title="Cleaner Reports"
         data_headers={data_headers}
         data_items={data}

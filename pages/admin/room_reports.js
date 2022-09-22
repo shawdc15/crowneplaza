@@ -14,11 +14,11 @@ const RoomReports = () => {
   const data_headers = [
     {
       name: 'ID No#',
-      key: 'reservation_id',
+      key: '_id',
     },
     {
       name: 'Date',
-      key: 'created_at',
+      key: 'date',
     },
     {
       name: 'Room #',
@@ -44,6 +44,7 @@ const RoomReports = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AdminMain
+        searchKey="reservationStatus"
         title="Room Reports"
         data_headers={data_headers}
         data_items={data}

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
+
 import { AdminMain, AdminSidebar } from '../../components'
 import { getAllCalendar } from '../../services/calendar.services'
 import moment from 'moment'
+import { MenuSvg } from '../../components/Svg'
 
 const TaskReports = () => {
   const [data, setData] = useState()
@@ -13,6 +15,7 @@ const TaskReports = () => {
       setData(data)
     }
   }, [])
+  const noStatus = ['_id', 'date', 'cleaner', 'roomNo', 'verifiedBy']
   const data_headers = [
     {
       name: 'ID No#',
@@ -68,15 +71,30 @@ const TaskReports = () => {
         <AdminSidebar nav={nav} />
         <div className="w-full p-4 lg:p-10">
           <div>
-            <input
-              onChange={(e) => setSearch(e.target.value)}
-              className="my-2 w-full rounded-md border border-slate-300 px-4 py-3"
-              type="text"
-              placeholder="Search here"
-            />
-          </div>
-          <div className="flex items-center justify-between gap-4">
-            <p className="text-2xl font-semibold">Task Reports</p>
+            <div className="mb-4 flex items-center gap-4 lg:hidden">
+              <span
+                onClick={() => setNav(!nav)}
+                className="inline-block cursor-pointer rounded-full bg-slate-200 p-1 text-center"
+              >
+                <MenuSvg />
+              </span>
+              <div>
+                <p className="border-b-4 border-emerald-400 text-lg font-bold ">
+                  Crowné Plaza
+                </p>
+              </div>
+            </div>
+            <div>
+              <input
+                onChange={(e) => setSearch(e.target.value)}
+                className="my-2 w-full rounded-md border border-slate-300 px-4 py-3"
+                type="text"
+                placeholder="Search here"
+              />
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <p className="text-2xl font-semibold">Task Reports</p>
+            </div>
           </div>
           <table className="mt-4 w-full table-auto text-sm">
             <thead>
@@ -99,11 +117,13 @@ const TaskReports = () => {
                           className="border-2 border-slate-100 px-3 text-slate-600"
                           key={sub_index}
                         >
-                          {item[key]?.taskStatus
-                            ? `Status: \n${item[key]?.taskStatus} \nNote:\n${item[key]?.notes}`
-                            : key == 'date'
+                          {key == 'date'
                             ? moment(item[key]).format('YYYY-MM-DD')
-                            : item[key]}
+                            : noStatus.includes(key)
+                            ? item[key]
+                            : `Status: \n${
+                                item[key]?.taskStatus || ''
+                              } \nNote:\n${item[key]?.notes || ''}`}
                         </td>
                       ))}
                   </tr>

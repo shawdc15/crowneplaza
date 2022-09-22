@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import AdminSidebar from './AdminSidebar'
 import AdminTable from './AdminTable'
 
-const AdminMain = ({ title, data_headers, data_items, searchKey }) => {
+const AdminMain = ({ title, data_headers, data_items, searchKey, duga }) => {
   const [nav, setNav] = useState(false)
   return (
     <div className={`flex min-h-screen ${nav ? 'overflow-hidden' : ''}`}>
@@ -14,6 +14,7 @@ const AdminMain = ({ title, data_headers, data_items, searchKey }) => {
           data_items={data_items}
           modalType={title}
           title={title}
+          duga={duga}
           nav={nav}
           setNav={setNav}
         />

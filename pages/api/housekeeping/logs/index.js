@@ -9,13 +9,14 @@ export default async (req, res) => {
   switch (method) {
     case 'GET':
       try {
-        const LogReport = await LogReport.find()
+        const logreport = await LogReport.find().sort({ date: -1 })
         res.status(200).json({
           success: true,
-          data: LogReport,
+          data: logreport,
         })
       } catch (error) {
-        res.status(400).json({ success: false })
+        console.log(error)
+        res.status(400).json({ success: false, error })
       }
       break
     case 'POST':

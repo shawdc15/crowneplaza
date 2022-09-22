@@ -133,6 +133,8 @@ const AdminTable = ({
                           ? item[key]?.join(',')
                           : key == 'customerName'
                           ? item['name']
+                          : key == 'date'
+                          ? moment(item[key]).format('YYYY-MM-DD')
                           : item[key]}
                       </td>
                     ))}

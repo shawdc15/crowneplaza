@@ -8,7 +8,7 @@ import {
   checkHousekeeping,
   addCalendarData,
 } from '../../services/calendar.services'
-
+import { addLogs } from '../../services/logreport.services'
 const RoomRecord = ({ role }) => {
   const router = useRouter()
   let id = router.query.id
@@ -93,7 +93,6 @@ const RoomRecord = ({ role }) => {
     })
 
     const newData = {}
-    // console.log(temp)
     for (let d of data_items) {
       newData[toCamelCase(d)] = {
         taskStatus: temp[toCamelCase(d) + '-taskStatus'] || '',
@@ -115,10 +114,24 @@ const RoomRecord = ({ role }) => {
       // newData['cleaner'] = 'Nikita'
     }
     // console.log(newData)
+    const url = {
+      roomNo: id.split('-')[1],
+      roomName: id.split('-')[0],
+    }
+    const newLogs = {
+      preferredRoom: url.roomNo,
+      roomType: url.roomName,
+      roomStatus: temp['roomStatus'],
+      reservationStatus: temp['reservationStatus'],
+      cleaner: temp['cleaner'],
+      verifiedBy: 'John Doe',
+    }
+    console.log(newLogs)
     const { success, data } = await addCalendarData(newData)
     if (success) {
       setData(data)
       setSuccess(true)
+      await addLogs(newLogs)
     }
   }
   function toCamelCase(str) {
@@ -234,7 +247,7 @@ const RoomRecord = ({ role }) => {
                 ))}
             </tbody>
           </table>
-          <div className="my-4 flex  items-start justify-between rounded-md border p-4">
+          <div className="my-4 flex flex-col items-start justify-between gap-4 rounded-md border p-4 lg:flex-row">
             <div className="text-slate-700">
               <div className="flex items-center gap-4">
                 <p className="text-lg">Cleaner: </p>

@@ -5,7 +5,7 @@ const LogReportSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  roomNo: {
+  preferredRoom: {
     type: String,
   },
   roomType: {
