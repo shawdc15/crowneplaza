@@ -18,6 +18,12 @@ const ReceiptSchema = new mongoose.Schema({
   gcashNumber: {
     type: String,
   },
+  preferredRoom: {
+    type: String,
+  },
+  roomType: {
+    type: String,
+  },
   reservation_id: {
     type: String,
     required: [true, 'Please fill up this field'],
@@ -33,6 +39,10 @@ const ReceiptSchema = new mongoose.Schema({
   status: {
     type: String,
     required: [true, 'Please fill up this field'],
+  },
+  created_at: {
+    type: Date,
+    default: Date.now,
   },
 })
 

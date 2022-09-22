@@ -5,7 +5,7 @@ const Book = () => {
   const router = useRouter()
   let id = router.query.id
   return (
-    <BookCard id={id}>
+    <BookCard id={id} role="receptionist">
       <RoleHeader active="book" role="receptionist" />
     </BookCard>
   )

@@ -92,6 +92,10 @@ const Payment = () => {
           <PaymentLayout
             action={paymentHandler}
             total={data?.total}
+            metaData={{
+              roomType: data?.roomType,
+              preferredRoom: data?.preferredRoom,
+            }}
             id={id}
             isLoading={isLoading}
             mode="confirmation"

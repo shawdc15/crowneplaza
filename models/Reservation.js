@@ -29,10 +29,6 @@ const ReservationSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please fill up this field'],
   },
-  noOfGuest: {
-    type: Number,
-    required: [true, 'Please fill up this field'],
-  },
   noOfAdult: {
     type: Number,
     required: [true, 'Please fill up this field'],

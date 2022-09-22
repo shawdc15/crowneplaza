@@ -59,7 +59,7 @@ const BookCard = ({ id, children, role }) => {
       roomType: data?.roomName,
       checkIn: checkIn,
       checkOut: checkOut,
-      noOfGuest: guestRef.current?.value,
+      // noOfGuest: guestRef.current?.value,
       noOfAdult: adultsRef.current?.value,
       noOfChildren: childrenRef.current?.value,
       noOfExtraBed: extraBeds,
@@ -92,14 +92,19 @@ const BookCard = ({ id, children, role }) => {
     if (role == 'customer' && !state.isAuth) {
       dispatch({ type: 'OPEN_LOGIN_MODAL' })
     } else {
+      console.log(data?.maxAdult)
       if (
         (arrayOfVaccination.length > 0 &&
           diffRef.current > 0 &&
-          adultsRef.current?.value > 0) ||
+          adultsRef.current?.value > 0 &&
+          adultsRef.current?.value <= data?.maxAdult &&
+          childrenRef.current?.value <= data?.maxChildren) ||
         (arrayOfVaccination.length > 0 &&
           diffRef.current > 0 &&
           nameRef.current?.value &&
-          adultsRef.current?.value > 0)
+          adultsRef.current?.value > 0 &&
+          adultsRef.current?.value <= data?.maxAdult &&
+          childrenRef.current?.value <= data?.maxChildren)
       ) {
         setLoading(true)
         console.log('valid', diffRef?.current)
@@ -112,7 +117,7 @@ const BookCard = ({ id, children, role }) => {
   // fields
   const [checkIn, setCheckIn] = useState()
   const [checkOut, setCheckOut] = useState()
-  const guestRef = useRef()
+  // const guestRef = useRef()
   const adultsRef = useRef()
   const childrenRef = useRef()
   const [extraBeds, setExtraBeds] = useState(0)
@@ -227,11 +232,19 @@ const BookCard = ({ id, children, role }) => {
         <>
           <div className="mx-auto mb-auto max-w-container">
             <div className="mb-2 flex items-center">
-              <Link href="/customer/accommodation">
-                <button className="">
-                  <BackSvg />
-                </button>
-              </Link>
+              {role == 'customer' ? (
+                <Link href="/customer/accommodation">
+                  <button className="">
+                    <BackSvg />
+                  </button>
+                </Link>
+              ) : (
+                <Link href={`/${role}/book`}>
+                  <button className="">
+                    <BackSvg />
+                  </button>
+                </Link>
+              )}
               <h1 className=" py-2 px-4 text-2xl text-slate-900">
                 Reservation Form
               </h1>
@@ -248,12 +261,18 @@ const BookCard = ({ id, children, role }) => {
                 />
                 <p className="pt-4 text-xl">{data?.roomName}</p>
                 <p className="py-3">&#8369; {formatTotal(data?.price)}</p>
-                <p className="py-4 text-gray-700">{data?.details}</p>
+                <p className="py-4 text-gray-700">{data?.description}</p>
                 <p>
                   Note: {data?.note}
                   <br />
-                  {/* Extra bed costs 1,000 php per person inclusive of breakfast. */}
                 </p>
+                <ul className="ml-6 list-disc">
+                  <li>8 years old and below will free of charge.</li>
+                  <li>Extra Bed costs 1000 pesos each.</li>
+                  <li>Maximum Capacity of room:</li>
+                </ul>
+                <p className="indent-4">- {data?.maxAdult} Adult</p>
+                <p className="indent-4">- {data?.maxChildren} Children</p>
               </div>
               <div className="p-4">
                 {success && (
@@ -323,7 +342,7 @@ const BookCard = ({ id, children, role }) => {
                         ))}
                       </select>
                     </div>
-                    <div>
+                    {/* <div>
                       <label htmlFor="noOfGuests">No of Guests</label>
                       <input
                         minLength={0}
@@ -334,9 +353,11 @@ const BookCard = ({ id, children, role }) => {
                         type="number"
                         id="noOfGuests"
                       />
-                    </div>
+                    </div> */}
                     <div>
-                      <label htmlFor="noOfAdults">No of Adults</label>
+                      <label htmlFor="noOfAdults">
+                        No of Adults (max of {data?.maxAdult})
+                      </label>
                       <input
                         defaultValue={0}
                         ref={adultsRef}
@@ -346,7 +367,9 @@ const BookCard = ({ id, children, role }) => {
                       />
                     </div>
                     <div>
-                      <label htmlFor="noOfChildren">No of Children</label>
+                      <label htmlFor="noOfChildren">
+                        No of Children (max of {data?.maxChildren})
+                      </label>
                       <input
                         minLength={0}
                         min={0}

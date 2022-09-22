@@ -26,6 +26,14 @@ const AccomodationSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please fill up this field'],
   },
+  maxAdult: {
+    type: Number,
+    required: [true, 'Please fill up this field'],
+  },
+  maxChildren: {
+    type: Number,
+    required: [true, 'Please fill up this field'],
+  },
   image: {
     type: String,
   },

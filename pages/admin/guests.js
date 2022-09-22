@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import Head from 'next/head'
 import { useAppContext } from '../../context/AppContext'
 import { AdminMain, AdminSidebar } from '../../components'
-import { getAllStaff } from '../../services/staff.services'
+import { getGuestList } from '../../services/user.services'
 import { adminSearches } from '../../services/admin.services'
 
 const Guests = () => {
@@ -32,7 +32,8 @@ const Guests = () => {
   ]
   useEffect(async () => {
     dispatch({ type: 'CLEAR_SELECTED_DATA' })
-    const { success, data } = await getAllStaff('guest')
+    const { success, data } = await getGuestList()
+    console.log(data)
     if (success) {
       dispatch({ type: 'SET_SELECTED_DATA', value: data })
     }

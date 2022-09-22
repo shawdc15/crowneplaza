@@ -18,145 +18,115 @@ const HousekeepingSchema = new mongoose.Schema({
   },
   cleanBedroom: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   cleanToilet: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   cleanWindows: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   cleanFridge: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   cleanFurnitures: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   cleanBathtub: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   sweepFloor: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   mopFloor: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   emptyTrash: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   changeBedsheets: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   changePillowCase: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   changeBlankets: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   changeTowels: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   changeTrashBags: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   replaceToiletries: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },
   replaceRugs: {
     type: {
-      done: { type: Boolean },
-      broken: { type: Boolean },
-      repaired: { type: Boolean },
-      outOfOrder: { type: Boolean },
+      taskStatus: { type: String },
+      notes: { type: String },
+    },
+  },
+  others1: {
+    type: {
+      taskStatus: { type: String },
+      notes: { type: String },
+    },
+  },
+  others2: {
+    type: {
+      taskStatus: { type: String },
+      notes: { type: String },
+    },
+  },
+  others3: {
+    type: {
+      taskStatus: { type: String },
       notes: { type: String },
     },
   },

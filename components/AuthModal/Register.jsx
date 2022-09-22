@@ -18,8 +18,30 @@ const Register = () => {
   const usernameRef = useRef()
 
   const registerHandler = async (e) => {
-    dispatch({ type: 'REGISTER_REQUEST' })
     e.preventDefault()
+
+    dispatch({ type: 'REGISTER_REQUEST' })
+    if (contactRef.current.value.length != 10) {
+      dispatch({
+        type: 'REGISTER_ERROR',
+        value: {
+          ...error,
+          contactError: 'Invalid Phone Number',
+        },
+      })
+      return
+    }
+    if (ageRef.current.value < 18 || ageRef.current.value > 65) {
+      dispatch({
+        type: 'REGISTER_ERROR',
+        value: {
+          ...error,
+          contactError: '',
+          ageError: 'Age must be greater than 17 and less than 66!  ',
+        },
+      })
+      return
+    }
     const credentials = {
       username: usernameRef.current.value.trim(),
       email: emailRef.current.value.trim(),
@@ -58,7 +80,7 @@ const Register = () => {
                 </div>
                 <form className="flex flex-col" onSubmit={registerHandler}>
                   <div className="flex flex-col lg:flex-row lg:items-end">
-                    <div className="flex flex-col">
+                    <div className="flex w-full flex-col">
                       <span className="text-rose-500">
                         {error?.firstNameError}
                       </span>
@@ -66,11 +88,11 @@ const Register = () => {
                       <input
                         ref={firstNameRef}
                         type="text"
-                        className="my-2 rounded-md border border-slate-300 px-4 py-3 lg:mr-2"
+                        className="my-2  rounded-md border border-slate-300 px-4 py-3 lg:mr-2"
                         placeholder="First Name"
                       />
                     </div>
-                    <div className="flex flex-col">
+                    <div className="flex w-full flex-col">
                       <span className="text-rose-500">
                         {error?.lastNameError}
                       </span>
@@ -78,7 +100,7 @@ const Register = () => {
                       <input
                         ref={lastNameRef}
                         type="text"
-                        className="my-2 rounded-md border border-slate-300 px-4 py-3 lg:ml-2"
+                        className="my-2  rounded-md border border-slate-300 px-4 py-3 lg:ml-2"
                         placeholder="Last Name"
                       />
                     </div>
@@ -114,13 +136,15 @@ const Register = () => {
                       <span className="text-rose-500">
                         {error?.contactError}
                       </span>
-
-                      <input
-                        ref={contactRef}
-                        type="number"
-                        className="my-2 rounded-md border border-slate-300 px-4 py-3 lg:ml-2"
-                        placeholder="Contact Number"
-                      />
+                      <div className="relative flex items-center ">
+                        <span className="absolute left-4">+63</span>
+                        <input
+                          ref={contactRef}
+                          type="number"
+                          className="my-2 rounded-md border border-slate-300 px-4 py-3 pl-10 lg:ml-2"
+                          placeholder="Contact Number"
+                        />
+                      </div>
                     </div>
                   </div>
                   <span className="text-rose-500">{error?.passwordError}</span>

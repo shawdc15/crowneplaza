@@ -38,8 +38,8 @@ const forgotPassword = () => {
         }
         setError([])
       }
-      setIsLoading(false)
     }
+    setIsLoading(false)
   }
   const header = () => {
     return (

@@ -75,7 +75,7 @@ const CalendarModal = ({
       {mode == 'add' && (
         <ModalLayout>
           <div className="flex min-h-min min-w-card flex-col">
-            <p className="text-xl font-semibold">Add Events on</p>
+            <p className="text-xl font-semibold">Add Notes on</p>
             <p className="my-2">{moment(date).format('MMM DD, YYYY')}</p>
             <textarea
               className="my-2 rounded-md border border-slate-300 px-4 py-3 "
@@ -104,7 +104,7 @@ const CalendarModal = ({
       {mode == 'update' && (
         <ModalLayout>
           <div className="flex min-h-min min-w-card flex-col">
-            <p className="text-xl font-semibold">Update Event</p>
+            <p className="text-xl font-semibold">Update Note</p>
             <textarea
               className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
               ref={eventRef}
@@ -133,8 +133,8 @@ const CalendarModal = ({
       {mode == 'delete' && (
         <ModalLayout>
           <div className="flex min-h-min min-w-card flex-col">
-            <p className="text-xl font-semibold">Delete Event</p>
-            <p className="my-4">Are you sure you want to delete this event?</p>
+            <p className="text-xl font-semibold">Delete Note</p>
+            <p className="my-4">Are you sure you want to delete this note?</p>
             <div className="flex gap-4">
               <button
                 type="button"

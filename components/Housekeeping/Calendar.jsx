@@ -57,7 +57,7 @@ const Calendar = () => {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 ">
         <div className="max-h-note w-full overflow-auto border px-8">
           <div className="flex items-center justify-between">
-            <p className="my-5 text-xl ">Events</p>{' '}
+            <p className="my-5 text-xl ">Notes</p>{' '}
             <button
               onClick={() => setModalMode('add')}
               className="rounded-md bg-slate-800 p-2 px-6 text-white"
@@ -96,7 +96,7 @@ const Calendar = () => {
             </div>
           ))}
           {data && data.length == 0 && (
-            <p className="text-center font-semibold">No Events</p>
+            <p className="text-center font-semibold">No Notes</p>
           )}
         </div>
         <div className="w-full border px-4 ">

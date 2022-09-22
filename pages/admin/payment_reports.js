@@ -14,19 +14,35 @@ const Payment = () => {
   const data_headers = [
     {
       name: 'ID No#',
-      key: '_id',
+      key: 'reservation_id',
     },
     {
       name: 'Reference No.',
       key: '_id',
     },
     {
+      name: 'Name',
+      key: 'receiptFor',
+    },
+    {
       name: 'Channel',
       key: 'channel',
     },
     {
+      name: 'Room No',
+      key: 'preferredRoom',
+    },
+    {
+      name: 'Room Type',
+      key: 'roomType',
+    },
+    {
       name: 'Amount',
       key: 'total',
+    },
+    {
+      name: 'Date',
+      key: 'created_at',
     },
   ]
   return (

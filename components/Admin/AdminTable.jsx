@@ -33,6 +33,10 @@ const AdminTable = ({
     'Reservation Reports',
     'Payment Reports',
     'Cancellation Reports',
+    'Guests',
+    'Room Reports',
+    'Cleaner Reports',
+    'Task Reports',
   ]
   const formatTotal = (x) => {
     if (x != undefined) {
@@ -47,7 +51,7 @@ const AdminTable = ({
   const filteredData = data_items?.filter((item) =>
     item[searchKey]?.includes(search)
   )
-  console.log(filteredData)
+  console.log(data_items)
   return (
     <>
       <div>
@@ -126,7 +130,7 @@ const AdminTable = ({
                           : ['checkIn', 'checkOut'].includes(key)
                           ? moment(item[key]).format('MM/DD/YYYY')
                           : key == 'roomNo'
-                          ? item[key].join(',')
+                          ? item[key]?.join(',')
                           : key == 'customerName'
                           ? item['name']
                           : item[key]}

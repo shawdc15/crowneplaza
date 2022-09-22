@@ -14,24 +14,24 @@ const Footer = () => {
   const mapLink = {
     icon: <MapSvg />,
     base: '094 Tagaytay - Nasugbu Hwy, Tagaytay, Cavite',
-    link: 'https://tailwind-elements.com/docs/standard/forms/switch/',
+    link: '#',
   }
 
   const socialMediaLinks = [
     {
       icon: <FacebookSvg />,
       base: 'Crowné Plaza',
-      link: 'https://tailwind-elements.com/docs/standard/forms/switch/',
+      link: '#',
     },
     {
       icon: <InstagramSvg />,
       base: '@crownéplaza',
-      link: 'https://tailwind-elements.com/docs/standard/forms/switch/',
+      link: '#',
     },
     {
       icon: <TwitterSvg />,
       base: '@crownéplaza',
-      link: 'https://tailwind-elements.com/docs/standard/forms/switch/',
+      link: '#',
     },
   ]
   const businessContactLink = [

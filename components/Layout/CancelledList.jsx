@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Head from 'next/head'
+import { getAllReceipt } from '../../services/receipt.services'
 import { getReservationByStatus } from '../../services/reservation.services'
 import { ReservedCardModal, RoleHeader } from '../../components'
 import moment from 'moment'
 const ReservedList = ({ role, status }) => {
   const [data, setData] = useState()
+  const [receipt, setReceipt] = useState()
   const selectedData = useRef()
   const [modal, setModal] = useState(false)
   const [filter, setFilter] = useState('name')
@@ -15,6 +17,18 @@ const ReservedList = ({ role, status }) => {
       const { success, data } = await getReservationByStatus(status)
       if (success) {
         setData(data)
+        const receipt_result = await getAllReceipt(status)
+        const reservationIdList = data.map((d) => d._id)
+        console.log(reservationIdList)
+        let tmp
+        if (receipt_result) {
+          tmp = receipt_result.data?.filter(
+            (r) =>
+              reservationIdList.includes(r.reservation_id) &&
+              r.status == 'pending'
+          )
+        }
+        setReceipt(tmp)
       }
       mounted.current = true
     }
@@ -113,6 +127,7 @@ const ReservedList = ({ role, status }) => {
         <ReservedCardModal
           data={data}
           setData={setData}
+          receipt={receipt}
           id={selectedData.current}
           setModal={setModal}
         />

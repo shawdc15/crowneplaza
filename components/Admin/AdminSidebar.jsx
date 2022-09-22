@@ -94,6 +94,10 @@ const AdminSidebar = ({ nav }) => {
       name: 'Cleaner Reports',
       link: '/admin/cleaner_reports',
     },
+    {
+      name: 'Task Reports',
+      link: '/admin/task_reports',
+    },
   ]
   return (
     <div

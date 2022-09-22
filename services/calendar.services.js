@@ -51,6 +51,18 @@ export const updateCalendarData = async (newData) => {
   return result
 }
 
+export const getHousekeepingById = async (id) => {
+  const res = await fetch(`/api/housekeeping/` + id, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+  const result = await res.json()
+  return result
+}
+
 export const getCalendarDataByDate = async (newData) => {
   const res = await fetch(`/api/housekeeping/todayData/all`, {
     method: 'POST',
@@ -59,6 +71,17 @@ export const getCalendarDataByDate = async (newData) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(newData),
+  })
+  const result = await res.json()
+  return result
+}
+export const getAllCalendar = async () => {
+  const res = await fetch(`/api/housekeeping`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
   })
   const result = await res.json()
   return result

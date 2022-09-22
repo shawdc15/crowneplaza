@@ -17,11 +17,11 @@ const RoleHeader = ({ active, role }) => {
       link: '/receptionist/reserved_list',
       defaultActive: 'reserved',
     },
-    {
-      name: 'Requested List',
-      link: '/receptionist/requested_list',
-      defaultActive: 'requested',
-    },
+    // {
+    //   name: 'Requested List',
+    //   link: '/receptionist/requested_list',
+    //   defaultActive: 'requested',
+    // },
   ]
   const housekeeping_links = [
     {

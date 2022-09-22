@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
 import moment from 'moment'
 import { useRouter } from 'next/router'
-import { RoleHeader } from '../../components'
+import { RoleHeader, ModalLayout } from '../../components'
 import { BackSvg } from '../../components/Svg'
 import {
-  addCalendarData,
   checkHousekeeping,
+  addCalendarData,
 } from '../../services/calendar.services'
+
 const RoomRecord = ({ role }) => {
   const router = useRouter()
   let id = router.query.id
@@ -16,6 +16,7 @@ const RoomRecord = ({ role }) => {
   const mounted = useRef()
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState(null)
+
   useEffect(() => {
     const load = async () => {
       if (id) {
@@ -27,9 +28,8 @@ const RoomRecord = ({ role }) => {
         const res = await checkHousekeeping(newData)
         if (res.success) {
           setData(res.data[0])
-          setIsLoading(false)
-
           console.log(res.data[0])
+          setIsLoading(false)
         } else {
           router.push('/404')
         }
@@ -72,35 +72,38 @@ const RoomRecord = ({ role }) => {
     'Change Trashbags',
     'Replace Toiletries',
     'Replace Rugs',
+    'Others 1',
+    'Others 2',
+    'Others 3',
   ]
+
   const saveHandler = async (e) => {
     setSuccess(false)
 
     e.preventDefault()
     let temp = []
     Array.from(e.currentTarget.elements).forEach((field) => {
-      if (field.type == 'checkbox') {
-        temp[field.name] = field.checked
+      if (field.type == 'radio') {
+        if (field.checked) {
+          temp[field.name] = field.value
+        }
       } else {
         temp[field.name] = field.value
       }
     })
 
     const newData = {}
-
+    // console.log(temp)
     for (let d of data_items) {
       newData[toCamelCase(d)] = {
-        done: temp[toCamelCase(d) + '-done'],
-        broken: temp[toCamelCase(d) + '-broken'],
-        repaired: temp[toCamelCase(d) + '-repaired'],
-        outOfOrder: temp[toCamelCase(d) + '-outOfOrder'],
+        taskStatus: temp[toCamelCase(d) + '-taskStatus'] || '',
         notes: temp[toCamelCase(d) + '-notes'],
       }
     }
     newData = {
       ...newData,
     }
-    newData['cleaner'] = 'Nikita'
+    newData['cleaner'] = temp['cleaner']
     newData['roomNo'] = id.split('-')[1]
     newData['roomFloor'] = id.split('-')[1][0]
     newData['roomName'] = id.split('-')[0]
@@ -111,13 +114,13 @@ const RoomRecord = ({ role }) => {
       newData['verifiedBy'] = 'John Doe'
       // newData['cleaner'] = 'Nikita'
     }
+    // console.log(newData)
     const { success, data } = await addCalendarData(newData)
     if (success) {
       setData(data)
       setSuccess(true)
     }
   }
-
   function toCamelCase(str) {
     const splitName = str.split(' ')
     const firstWord = splitName[0].toLowerCase()
@@ -169,42 +172,51 @@ const RoomRecord = ({ role }) => {
                     </td>
                     <td className="text-center">
                       <input
-                        type="checkbox"
+                        type="radio"
                         className="p-2"
                         defaultChecked={
-                          data && data[`${toCamelCase(item)}`]?.done
+                          data &&
+                          data[`${toCamelCase(item)}`]?.taskStatus == 'done'
                         }
-                        name={`${toCamelCase(item)}-done`}
+                        name={`${toCamelCase(item)}-taskStatus`}
+                        value="done"
                       />
                     </td>
                     <td className="text-center">
                       <input
-                        type="checkbox"
+                        type="radio"
                         className="p-2"
                         defaultChecked={
-                          data && data[`${toCamelCase(item)}`]?.broken
+                          data &&
+                          data[`${toCamelCase(item)}`]?.taskStatus == 'broken'
                         }
-                        name={`${toCamelCase(item)}-broken`}
+                        name={`${toCamelCase(item)}-taskStatus`}
+                        value="broken"
                       />
                     </td>
                     <td className="text-center">
                       <input
-                        type="checkbox"
+                        type="radio"
                         className="p-2"
                         defaultChecked={
-                          data && data[`${toCamelCase(item)}`]?.repaired
+                          data &&
+                          data[`${toCamelCase(item)}`]?.taskStatus == 'repaired'
                         }
-                        name={`${toCamelCase(item)}-repaired`}
+                        name={`${toCamelCase(item)}-taskStatus`}
+                        value="repaired"
                       />
                     </td>
                     <td className="text-center">
                       <input
-                        type="checkbox"
+                        type="radio"
                         className="p-2"
                         defaultChecked={
-                          data && data[`${toCamelCase(item)}`]?.outOfOrder
+                          data &&
+                          data[`${toCamelCase(item)}`]?.taskStatus ==
+                            'outOfOrder'
                         }
-                        name={`${toCamelCase(item)}-outOfOrder`}
+                        name={`${toCamelCase(item)}-taskStatus`}
+                        value="outOfOrder"
                       />
                     </td>
                     <td className="text-center">
@@ -212,7 +224,7 @@ const RoomRecord = ({ role }) => {
                         type="text"
                         className="p-1"
                         defaultValue={
-                          data && data[`${toCamelCase(item)}`]?.notes
+                          (data && data[`${toCamelCase(item)}`]?.notes) || ''
                         }
                         name={`${toCamelCase(item)}-notes`}
                         placeholder="Type here"
@@ -224,13 +236,28 @@ const RoomRecord = ({ role }) => {
           </table>
           <div className="my-4 flex  items-start justify-between rounded-md border p-4">
             <div className="text-slate-700">
-              <p className="text-lg">Cleaner: {data?.cleaner}</p>
+              <div className="flex items-center gap-4">
+                <p className="text-lg">Cleaner: </p>
+                {!isLoading && (
+                  <select
+                    defaultValue={data?.cleaner}
+                    className="rounded-md border px-4 py-2"
+                    name="cleaner"
+                  >
+                    <option value="Supplies">Supplies</option>
+                    <option value="Cleaning">Cleaning</option>
+                    <option value="Plumbing">Plumbing</option>
+                    <option value="Laundry">Laundry</option>
+                    <option value="Technician">Technician</option>
+                  </select>
+                )}
+              </div>
               <p className="text-lg">Verified By: {data?.verifiedBy}</p>
               <p className="text-lg">Date: {moment().format('MMM DD,YYYY')}</p>
             </div>
             {role == 'manager' && !isLoading && (
               <>
-                <div>
+                <div className="text-slate-700">
                   <p>Reservation Status</p>
                   <select
                     defaultValue={data?.reservationStatus}
@@ -243,7 +270,7 @@ const RoomRecord = ({ role }) => {
                     <option value="Reserved">Reserved</option>
                   </select>
                 </div>
-                <div>
+                <div className="text-slate-700">
                   <p>Room Status</p>
                   <select
                     defaultValue={data?.roomStatus}
@@ -258,9 +285,22 @@ const RoomRecord = ({ role }) => {
                 </div>
               </>
             )}
-            <button className="rounded-md bg-emerald-500 px-4 py-2 text-white">
-              Save and Close
-            </button>
+            <div className="flex gap-4">
+              {role == 'manager' && data?._id && (
+                <>
+                  <a
+                    className="rounded-md bg-slate-500 px-4 py-2 text-white"
+                    href={`../../print/${data?._id}`}
+                    target="_blank"
+                  >
+                    View Print
+                  </a>
+                </>
+              )}
+              <button className="rounded-md bg-emerald-500 px-4 py-2 text-white">
+                Save and Close
+              </button>
+            </div>
           </div>
         </form>
       </div>

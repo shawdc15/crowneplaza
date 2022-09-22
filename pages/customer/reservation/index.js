@@ -82,7 +82,7 @@ const History = () => {
                           </div>
                           <div className="py-4 md:p-4">
                             <div>
-                              <p className="my-2 text-xl">
+                              <p className="my-2 flex flex-col items-center text-xl sm:flex-row">
                                 {roomType}
                                 <span className="my-2 ml-2 rounded-md bg-emerald-400 px-2 py-1 text-lg text-white">
                                   Room No: {preferredRoom}

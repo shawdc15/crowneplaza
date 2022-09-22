@@ -1,5 +1,13 @@
 import React, { useState, useRef } from 'react'
-const PaymentLayout = ({ mode, action, reason, total, id, isLoading }) => {
+const PaymentLayout = ({
+  mode,
+  action,
+  reason,
+  total,
+  id,
+  isLoading,
+  metaData,
+}) => {
   const [error, setError] = useState(null)
   const [method, setMethod] = useState('Gcash')
 
@@ -33,6 +41,7 @@ const PaymentLayout = ({ mode, action, reason, total, id, isLoading }) => {
     }
     newData = {
       ...newData,
+      ...metaData,
       paymentMethod: method,
       channel: method,
       status: mode == 'confirmation' ? 'paid' : 'pending',

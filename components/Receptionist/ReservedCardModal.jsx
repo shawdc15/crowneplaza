@@ -6,7 +6,7 @@ import {
   getReservationById,
   updateStatus,
 } from '../../services/reservation.services'
-const ReservedCardModal = ({ setData, data, id, setModal }) => {
+const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
   const [selectedData, setSelectedData] = useState()
   const [selectedLargeImage, setSelectedLargeImage] = useState(null)
   useEffect(async () => {
@@ -58,6 +58,14 @@ const ReservedCardModal = ({ setData, data, id, setModal }) => {
       const newData = data.filter((item) => item._id != id)
       setData(newData)
       setModal(false)
+    }
+  }
+  const receiptHandler = (id) => {
+    for (let r in receipt) {
+      if (receipt[r].reservation_id == id) {
+        console.log(receipt[r].reason)
+        return receipt[r].reason
+      }
     }
   }
   return (
@@ -113,6 +121,7 @@ const ReservedCardModal = ({ setData, data, id, setModal }) => {
                         {/* <p>Voucher: {voucherCode}</p> */}
                         <p>Purpose of Stay: {purposeOfStay}</p>
                         <p>Remarks: {remarks}</p>
+                        {receipt && <p>Reason: {receiptHandler(_id)}</p>}
                       </div>
                       <div>
                         <div className="flex flex-wrap gap-4">

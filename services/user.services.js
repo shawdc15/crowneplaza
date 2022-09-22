@@ -123,3 +123,15 @@ export const sendPasswordLink = async (newData) => {
   const result = await res.json()
   return result
 }
+
+export const getGuestList = async () => {
+  const res = await fetch(`/api/user`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+  const result = await res.json()
+  return result
+}

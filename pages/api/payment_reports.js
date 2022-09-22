@@ -10,6 +10,7 @@ export default async (req, res) => {
     case 'GET':
       try {
         const receipt = await Receipt.find({ status: 'paid' })
+
         res.status(200).json({
           success: true,
           data: receipt,

@@ -24,6 +24,9 @@ const RoomModal = ({ setModal, mode }) => {
   const descriptionRef = useRef()
   const priceRef = useRef()
   const roomNoRef = useRef()
+  const maxAdultRef = useRef()
+  const maxChildrenRef = useRef()
+
   // const floorRef = useRef()
   const roomStatusRef = useRef()
   const noteRef = useRef()
@@ -48,8 +51,9 @@ const RoomModal = ({ setModal, mode }) => {
       description: descriptionRef.current?.value,
       price: priceRef.current?.value,
       roomName: roomNameRef.current?.value,
-      // floor: floorRef.current?.value,
       roomStatus: roomStatusRef.current?.value,
+      maxAdult: maxAdultRef.current?.value,
+      maxChildren: maxChildrenRef.current?.value,
       note: noteRef.current?.value,
       image: imageUrlRef?.current || state.adminModalData?.image,
     }
@@ -112,9 +116,18 @@ const RoomModal = ({ setModal, mode }) => {
     if (roomNoRef.current.value.trim().length < 1) {
       tempError = { ...tempError, roomNoError: 'Room No must not be empty' }
     }
-    // if (floorRef.current.value.trim().length < 1) {
-    //   tempError = { ...tempError, floorError: 'Floor must not be empty' }
-    // }
+    if (maxAdultRef.current.value < 0) {
+      tempError = {
+        ...tempError,
+        maxAdultError: 'Max adult must be higher or equal to 0',
+      }
+    }
+    if (maxChildrenRef.current.value < 0) {
+      tempError = {
+        ...tempError,
+        maxChildrenError: 'Max children must be higher or equal to 0',
+      }
+    }
     if (roomStatusRef.current.value.trim().length < 1) {
       tempError = { ...tempError, roomStatus: 'Room Status must not be empty' }
     }
@@ -126,12 +139,15 @@ const RoomModal = ({ setModal, mode }) => {
       setDisabled(false)
     }
     setError(tempError)
+    console.log(Object.keys(tempError)?.length)
     if (Object.keys(tempError)?.length == 0) {
       if (imageUpload) {
         uploadFile()
       } else {
         finalHandler()
       }
+    } else {
+      setDisabled(false)
     }
   }
   return (
@@ -188,6 +204,26 @@ const RoomModal = ({ setModal, mode }) => {
               className=" my-2 rounded-md border border-slate-300 px-4 py-3"
               placeholder="Price"
               defaultValue={state.adminModalData?.price}
+            />
+
+            <span className="text-rose-500">{error?.maxAdultError}</span>
+            <label className="mt-2 text-slate-600">Max Adult</label>
+            <input
+              type="number"
+              ref={maxAdultRef}
+              className=" my-2 rounded-md border border-slate-300 px-4 py-3"
+              placeholder="Max Adult"
+              defaultValue={state.adminModalData?.maxAdult || 0}
+            />
+
+            <span className="text-rose-500">{error?.maxChildrenError}</span>
+            <label className="mt-2 text-slate-600">Max Children</label>
+            <input
+              type="number"
+              ref={maxChildrenRef}
+              className=" my-2 rounded-md border border-slate-300 px-4 py-3"
+              placeholder="Max Children"
+              defaultValue={state.adminModalData?.maxChildren || 0}
             />
 
             <span className="text-rose-500">{error?.roomNoError}</span>
