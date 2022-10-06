@@ -66,12 +66,12 @@ const Auth = () => {
             className="my-2 rounded-md border border-slate-300 px-4 py-3 "
             placeholder="Password"
           />
-          <p
+          {/* <p
             onClick={forgotHandler}
             className="cursor-pointer py-2 text-emerald-500 underline"
           >
             Forgot Password
-          </p>
+          </p> */}
           {!isLoading ? (
             <button
               type="submit"

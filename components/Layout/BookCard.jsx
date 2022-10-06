@@ -24,6 +24,8 @@ import { v4 } from 'uuid'
 import { storage } from '../../services/firebase'
 
 const BookCard = ({ id, children, role }) => {
+  const [adultError, setAdultError] = useState(false)
+  const [childrenError, setChildrenError] = useState(false)
   const [data, setData] = useState()
   const { state, dispatch } = useAppContext()
   const [success, setSuccess] = useState(false)
@@ -60,8 +62,8 @@ const BookCard = ({ id, children, role }) => {
       checkIn: checkIn,
       checkOut: checkOut,
       // noOfGuest: guestRef.current?.value,
-      noOfAdult: adultsRef.current?.value,
-      noOfChildren: childrenRef.current?.value,
+      noOfAdult: noAdult,
+      noOfChildren: noChildren,
       noOfExtraBed: extraBeds,
       purposeOfStay: purposeOfStayRef.current?.value,
       remarks: remarksRef.current?.value,
@@ -71,7 +73,9 @@ const BookCard = ({ id, children, role }) => {
       status: role == 'customer' ? 'requested' : 'reserved',
       preferredRoom: roomRef.current?.value,
       total: total,
-      vaccination: arrayOfVaccinationRef?.current,
+    }
+    if (role != 'receptionist') {
+      newData = { ...newData, vaccination: arrayOfVaccinationRef?.current }
     }
     const res = await addReservation(newData)
     if (res.success) {
@@ -82,6 +86,7 @@ const BookCard = ({ id, children, role }) => {
           : '/receptionist/reserved_list'
       )
     } else {
+      console.log(res)
       setLoading(false)
       setSuccess(true)
     }
@@ -94,18 +99,32 @@ const BookCard = ({ id, children, role }) => {
       if (
         (arrayOfVaccination.length > 0 &&
           diffRef.current > 0 &&
-          adultsRef.current?.value > 0 &&
-          adultsRef.current?.value <= data?.maxAdult &&
-          childrenRef.current?.value <= data?.maxChildren) ||
+          noAdult > 0 &&
+          noAdult <= data?.maxAdult &&
+          noChildren <= data?.maxChildren) ||
         (arrayOfVaccination.length > 0 &&
           diffRef.current > 0 &&
           nameRef.current?.value &&
-          adultsRef.current?.value > 0 &&
-          adultsRef.current?.value <= data?.maxAdult &&
-          childrenRef.current?.value <= data?.maxChildren)
+          noAdult > 0 &&
+          noAdult <= data?.maxAdult &&
+          noChildren <= data?.maxChildren)
       ) {
         setLoading(true)
         uploadFile()
+      } else if (
+        ((diffRef.current > 0 &&
+          noAdult > 0 &&
+          noAdult <= data?.maxAdult &&
+          noChildren <= data?.maxChildren) ||
+          (diffRef.current > 0 &&
+            nameRef.current?.value &&
+            noAdult > 0 &&
+            noAdult <= data?.maxAdult &&
+            noChildren <= data?.maxChildren)) &&
+        role == 'receptionist'
+      ) {
+        setLoading(true)
+        finalHandler()
       } else {
         setSuccess(true)
       }
@@ -115,8 +134,8 @@ const BookCard = ({ id, children, role }) => {
   const [checkIn, setCheckIn] = useState()
   const [checkOut, setCheckOut] = useState()
   // const guestRef = useRef()
-  const adultsRef = useRef()
-  const childrenRef = useRef()
+  const [noAdult, setNoAdult] = useState()
+  const [noChildren, setNoChildren] = useState()
   const [extraBeds, setExtraBeds] = useState(0)
   const purposeOfStayRef = useRef()
   const remarksRef = useRef()
@@ -344,25 +363,55 @@ const BookCard = ({ id, children, role }) => {
                       />
                     </div> */}
                     <div>
+                      {adultError && (
+                        <span className="text-rose-500">
+                          Number of guests has exceeded the given maximum
+                          capacity.
+                          <br />
+                        </span>
+                      )}
                       <label htmlFor="noOfAdults">
                         No of Adults (max of {data?.maxAdult})
                       </label>
                       <input
                         defaultValue={0}
-                        ref={adultsRef}
+                        onChange={(e) => {
+                          let ct = e.target.value
+                          setNoAdult(ct)
+                          if (ct > data?.maxAdult) {
+                            setAdultError(true)
+                          } else {
+                            setAdultError(false)
+                          }
+                        }}
                         className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
                         type="number"
                         id="noOfAdults"
                       />
                     </div>
                     <div>
+                      {childrenError && (
+                        <span className="text-rose-500">
+                          Number of guests has exceeded the given maximum
+                          capacity.
+                          <br />
+                        </span>
+                      )}
                       <label htmlFor="noOfChildren">
                         No of Children (max of {data?.maxChildren})
                       </label>
                       <input
                         minLength={0}
                         min={0}
-                        ref={childrenRef}
+                        onChange={(e) => {
+                          let ct = e.target.value
+                          setNoChildren(ct)
+                          if (ct > data?.maxChildren) {
+                            setChildrenError(true)
+                          } else {
+                            setChildrenError(false)
+                          }
+                        }}
                         defaultValue={0}
                         className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
                         type="number"
@@ -444,29 +493,31 @@ const BookCard = ({ id, children, role }) => {
                         id="remarks"
                       />
                     </div>
-                    <div>
-                      <label htmlFor="id">
-                        Vaccinations cards and valid IDs for each guest
-                      </label>
-                      <p>Note: Maximum of 10 uploads</p>
-                      {arrayOfVaccination.length < 10 && (
-                        <input
-                          className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
-                          type="file"
-                          id="id"
-                          onChange={(e) => {
-                            setArrayOfVaccination([
-                              ...arrayOfVaccination,
-                              {
-                                url: URL.createObjectURL(e.target.files[0]),
-                                file: e.target.files[0],
-                              },
-                            ])
-                          }}
-                          accept="image/*"
-                        />
-                      )}
-                    </div>
+                    {role == 'customer' && (
+                      <div>
+                        <label htmlFor="id">
+                          Vaccinations cards and valid IDs for each guest
+                        </label>
+                        <p>Note: Maximum of 10 uploads</p>
+                        {arrayOfVaccination.length < 10 && (
+                          <input
+                            className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
+                            type="file"
+                            id="id"
+                            onChange={(e) => {
+                              setArrayOfVaccination([
+                                ...arrayOfVaccination,
+                                {
+                                  url: URL.createObjectURL(e.target.files[0]),
+                                  file: e.target.files[0],
+                                },
+                              ])
+                            }}
+                            accept="image/*"
+                          />
+                        )}
+                      </div>
+                    )}
                     <div></div>
                     <div className="col-span-2 flex flex-wrap gap-4">
                       {arrayOfVaccination.map(({ url }, index) => (

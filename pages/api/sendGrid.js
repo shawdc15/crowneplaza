@@ -19,6 +19,10 @@ async function sendEmail(req, res) {
       finalHtml = confirmation(req.body)
       sub = 'Confirmation'
       break
+    case 'declined_cancel': {
+      finalHtml = declinedCancel(req.body)
+      sub = 'Declined Cancellation'
+    }
     default:
       break
   }
@@ -367,4 +371,28 @@ const confirmation = ({ status, channel, reference, name, total }) => {
 </body>
 </html>`
 }
+const declinedCancel = ({ name, message }) => {
+  return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Crowne Plaza</title>
+    <meta name="description" content="Crowne Plaza">
+    <meta name="author" content="SitePoint">
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    </head>
+  <body>
+    <span>Dear Ms./Mr. ${name},</span><br>
+    <p style="text-indent: 50px;">${message}
+        <br/>
+        <br/>Crowne Plaza
+        <br/>084215466
+        <br/>Tagaytay
+    </p>
+  </body>
+  </html>
+  `
+}
+
 export default sendEmail

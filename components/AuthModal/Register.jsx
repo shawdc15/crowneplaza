@@ -138,6 +138,7 @@ const Register = () => {
                       <div className="relative flex items-center ">
                         <span className="absolute left-4">+63</span>
                         <input
+                          id="fix"
                           ref={contactRef}
                           type="number"
                           className="my-2 rounded-md border border-slate-300 px-4 py-3 pl-10 lg:ml-2"

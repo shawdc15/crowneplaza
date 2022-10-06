@@ -72,3 +72,16 @@ export const sendReceipt = async (newData) => {
   const result = await res.json()
   return result
 }
+
+export const declinedReceipt = async (newData) => {
+  const res = await fetch(`/api/sendGrid`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newData),
+  })
+  const result = await res.json()
+  return result
+}

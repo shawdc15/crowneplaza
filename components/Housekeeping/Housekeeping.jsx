@@ -29,6 +29,9 @@ const HouseKeeping = ({ role }) => {
     { name: 'Room Status', key: 'roomStatus' },
     { name: 'Reservation Status', key: 'reservationStatus' },
   ]
+  if (role == 'receptionist') {
+    data_headers.splice(3, 1)
+  }
 
   const changeHandler = async (item) => {
     setIsLoading(true)
@@ -36,7 +39,7 @@ const HouseKeeping = ({ role }) => {
       roomName: item.roomName,
       roomNo: item.roomNo,
       date: item.date,
-      roomStatus: roomStatusRef.current.value,
+      roomStatus: roomStatusRef.current?.value || data?.roomStatus,
       reservationStatus: reservationStatusRef.current.value,
     }
     const { success } = await addCalendarData(newData)
@@ -44,7 +47,7 @@ const HouseKeeping = ({ role }) => {
       const newLogs = {
         preferredRoom: item.roomNo,
         roomType: item.roomName,
-        roomStatus: roomStatusRef.current.value,
+        roomStatus: roomStatusRef.current?.value || data?.roomStatus,
         reservationStatus: reservationStatusRef.current.value,
         cleaner: item.cleaner,
         verifiedBy: 'John Doe',
@@ -66,7 +69,11 @@ const HouseKeeping = ({ role }) => {
         <title>Manager Housekeeping | Crowné Plaza</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <RoleHeader active="housekeepings" role={role} />
+      {role == 'receptionist' ? (
+        <RoleHeader active="reservation" role={role} />
+      ) : (
+        <RoleHeader active="housekeepings" role={role} />
+      )}
       {isLoading && (
         <ModalLayout>Please wait table is now updating...</ModalLayout>
       )}
@@ -129,6 +136,7 @@ const HouseKeeping = ({ role }) => {
                             onChange={() => changeHandler(item)}
                             ref={reservationStatusRef}
                           >
+                            <option value="Not Reserved">Not Reserved</option>
                             <option value="Reserved">Reserved</option>
                             <option value="Checked-Out">Checked-Out</option>
                             <option value="Not Available">Not Available</option>

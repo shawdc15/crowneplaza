@@ -17,6 +17,11 @@ const RoleHeader = ({ active, role }) => {
       link: '/receptionist/reserved_list',
       defaultActive: 'reserved',
     },
+    {
+      name: 'Reserved Status',
+      link: '/receptionist/reservation_status',
+      defaultActive: 'reservation',
+    },
     // {
     //   name: 'Requested List',
     //   link: '/receptionist/requested_list',
