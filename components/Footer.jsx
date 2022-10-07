@@ -26,7 +26,7 @@ const Footer = () => {
     {
       icon: <InstagramSvg />,
       base: '@crownéplaza',
-      link: '#',
+      link: 'https://www.instagram.com/crowne_plaza_hotel_ph/',
     },
     {
       icon: <TwitterSvg />,
