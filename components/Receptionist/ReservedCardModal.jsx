@@ -102,6 +102,7 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
                 noOfAdult,
                 voucherCode,
                 remarks,
+                contact,
                 status,
                 purposeOfStay,
               },
@@ -125,6 +126,7 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
                       <p>No of Guests: {noOfGuest}</p>
                       <p>Adult: {noOfAdult}</p>
                       <p>Children: {noOfChildren}</p>
+                      <p>Contact: {contact}</p>
                     </div>
                     <div className="p-2 text-slate-600">
                       <p>No of extra beds: {noOfExtraBed}</p>

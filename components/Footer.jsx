@@ -14,14 +14,14 @@ const Footer = () => {
   const mapLink = {
     icon: <MapSvg />,
     base: '094 Tagaytay - Nasugbu Hwy, Tagaytay, Cavite',
-    link: '#',
+    link: 'https://www.google.com/maps/dir/14.096166,120.916313/@14.0961481,120.8464555,12z',
   }
 
   const socialMediaLinks = [
     {
       icon: <FacebookSvg />,
       base: 'Crowné Plaza',
-      link: '#',
+      link: 'https://www.facebook.com/people/Crown%C3%A9-Plaza/100086739811322/',
     },
     {
       icon: <InstagramSvg />,
@@ -31,7 +31,7 @@ const Footer = () => {
     {
       icon: <TwitterSvg />,
       base: '@crownéplaza',
-      link: '#',
+      link: 'https://twitter.com/crowneplaza_ph',
     },
   ]
   const businessContactLink = [
@@ -48,7 +48,7 @@ const Footer = () => {
     {
       icon: <GmailSvg />,
       base: 'crownéplaza@gmail.com',
-      link: '#contact',
+      link: 'mailto:yourcrowneplaza@gmail.com',
     },
   ]
   return (
@@ -60,20 +60,20 @@ const Footer = () => {
         <div className="p-4 ">
           <ul>
             <li>
-              <Link href={mapLink.link}>
+              <a href={mapLink.link} target="_blank">
                 <p className="flex cursor-pointer items-center text-slate-300 transition-colors duration-100 hover:text-emerald-500">
                   <span className="block w-icon p-2 ">{mapLink.icon}</span>
                   {mapLink.base}
                 </p>
-              </Link>
+              </a>
             </li>
             {businessContactLink.map(({ icon, base, link }, index) => (
               <li key={index}>
-                <Link href={link}>
+                <a href={link} target="_blank">
                   <p className="flex cursor-pointer items-center text-slate-300 transition-colors duration-100 hover:text-emerald-500">
                     <span className="block w-icon p-2 ">{icon}</span> {base}
                   </p>
-                </Link>
+                </a>
               </li>
             ))}
           </ul>
@@ -82,11 +82,11 @@ const Footer = () => {
           <ul>
             {socialMediaLinks.map(({ icon, base, link }, index) => (
               <li key={index}>
-                <Link href={link}>
+                <a href={link} target="_blank">
                   <p className="flex cursor-pointer items-center text-slate-300 transition-colors duration-100 hover:text-emerald-500">
                     <span className="block w-icon p-2 ">{icon}</span> {base}
                   </p>
-                </Link>
+                </a>
               </li>
             ))}
           </ul>

@@ -66,6 +66,9 @@ const ReservationSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Please fill up this field'],
   },
+  contact: {
+    type: String,
+  },
   vaccination: { type: [{ type: String }] },
 })
 

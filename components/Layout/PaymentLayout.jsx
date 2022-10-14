@@ -9,12 +9,12 @@ const PaymentLayout = ({
   metaData,
 }) => {
   const [error, setError] = useState(null)
-  const [method, setMethod] = useState('Gcash')
+  const [method, setMethod] = useState('Paypal')
 
   const paymentHandler = async () => {
     let temp_error = null
     const newData = null
-    if (method == 'Gcash') {
+    if (method == 'Paypal') {
       newData = {
         receiptFor: gcashFullnameRef.current.value.trim(),
         gcashNumber: phoneNumberRef.current.value.trim(),
@@ -71,7 +71,7 @@ const PaymentLayout = ({
           type="number"
           ref={phoneNumberRef}
           className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
-          placeholder="Gcash Number"
+          placeholder="Paypal Number"
         />
         <input
           type="text"
@@ -167,14 +167,14 @@ const PaymentLayout = ({
               if (cardNumberRef.current?.value != null) {
                 cardNumberRef.current.value = ''
               }
-              setMethod('Gcash')
+              setMethod('Paypal')
             }}
-            src={'/gcash.png'}
+            src={'/paypal.png'}
             className={`aspect-video h-24 rounded-md border-2 ${
-              method == 'Gcash' && 'border-emerald-500'
+              method == 'Paypal' && 'border-emerald-500'
             }`}
           />
-          <img
+          {/* <img
             onClick={() => {
               if (phoneNumberRef.current?.value != null) {
                 phoneNumberRef.current.value = ''
@@ -186,9 +186,9 @@ const PaymentLayout = ({
             className={`aspect-video h-24 rounded-md border-2 ${
               method == 'Visa' && 'border-emerald-500'
             } bg-white p-4`}
-          />
+          /> */}
         </div>
-        <div className="px-4">{method == 'Gcash' ? gcash() : visa()}</div>
+        <div className="px-4">{method == 'Paypal' ? gcash() : visa()}</div>
       </div>
     </div>
   )
