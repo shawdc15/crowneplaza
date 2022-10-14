@@ -19,10 +19,14 @@ async function sendEmail(req, res) {
       finalHtml = confirmation(req.body)
       sub = 'Confirmation'
       break
-    case 'declined_cancel': {
+    case 'declined_cancel':
       finalHtml = declinedCancel(req.body)
       sub = 'Declined Cancellation'
-    }
+      break
+    case 'request':
+      finalHtml = requested(req.body)
+      sub = 'Book Request'
+      break
     default:
       break
   }
@@ -234,6 +238,7 @@ const cancellation = ({ status, channel, reference, name, total }) => {
   </body>
   </html>`
 }
+
 const confirmation = ({ status, channel, reference, name, total }) => {
   return `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -371,6 +376,7 @@ const confirmation = ({ status, channel, reference, name, total }) => {
 </body>
 </html>`
 }
+
 const declinedCancel = ({ name, message }) => {
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html lang="en">
@@ -393,6 +399,31 @@ const declinedCancel = ({ name, message }) => {
   </body>
   </html>
   `
+}
+
+const requested = ({ link, name }) => {
+  return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Crowne Plaza</title>
+    <meta name="description" content="Crowne Plaza">
+    <meta name="author" content="SitePoint">
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    </head>
+  <body>
+    <span>Good day ${name}, your book request has been approved by the manager, Please pay for the given time to make the reservation complete or else the request will be automatically cancelled. </span><br>
+    <p>Click to proceed in payment page</p>
+    <a href="${link}">${link}</a>
+    <p>
+        <br/>
+        <br/>Crowne Plaza
+        <br/>084215466
+        <br/>Tagaytay
+    </p>
+  </body>
+  </html>`
 }
 
 export default sendEmail

@@ -39,7 +39,11 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
     }
   }
   const approveHandler = async () => {
-    const res = await updateStatus(id, { status: 'approved' })
+    const res = await updateStatus(id, {
+      status: 'approved',
+      start_expiration: moment().clone(),
+      end_expiration: moment().clone().add(8, 'm'),
+    })
     if (res.success) {
       const newData = data.filter((item) => item._id != id)
       setData(newData)
@@ -49,6 +53,17 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
   const declineHandler = async () => {
     const res = await updateStatus(id, { status: 'declined' })
     if (res.success) {
+      const backUpMessage =
+        'Your request for booking is declined due to unreasonable agenda. We are sorry for the inconvenience and we hope you’ll understand.'
+      const reservationData = data.filter((item) => item._id == id)
+      if (reservationData[0]?.email?.length > 0) {
+        const emailData = {
+          email: reservationData[0]?.email,
+          subject: 'Reservation request cancelled',
+          message: reasonref.current?.value || backUpMessage,
+        }
+        await declinedReceipt(emailData)
+      }
       const newData = data.filter((item) => item._id != id)
       setData(newData)
       setModal(false)

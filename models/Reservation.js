@@ -70,6 +70,12 @@ const ReservationSchema = new mongoose.Schema({
     type: String,
   },
   vaccination: { type: [{ type: String }] },
+  start_expiration: {
+    type: Date,
+  },
+  end_expiration: {
+    type: Date,
+  },
 })
 
 module.exports =
