@@ -73,7 +73,6 @@ const BookCard = ({ id, children, role }) => {
       status: role == 'customer' ? 'requested' : 'reserved',
       preferredRoom: roomRef.current?.value,
       total: total,
-      contact: role == 'customer' ? state.user?.contact : 'n/a',
     }
     if (role != 'receptionist') {
       newData = { ...newData, vaccination: arrayOfVaccinationRef?.current }

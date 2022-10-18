@@ -73,6 +73,7 @@ const CancelReservation = () => {
     setIsLoading(true)
     const newData = {
       status: 'request cancellation',
+      contact: receiptData.gcashNumber,
     }
     console.log(receiptData)
     const update_res = await updateStatus(id, newData)

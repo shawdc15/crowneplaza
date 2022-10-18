@@ -13,12 +13,15 @@ import {
   postConfirmationReceipt,
   sendReceipt,
 } from '../../../services/receipt.services'
+import moment from 'moment'
+import Link from 'next/link'
 const Payment = () => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const id = router.query.id
   const [modalData, setModalData] = useState()
   const [data, setData] = useState()
+  const [expired, setExpired] = useState(false)
   const mounted = useRef()
   useEffect(async () => {
     const load = async () => {
@@ -29,6 +32,13 @@ const Payment = () => {
           router.push('/customer/reservation')
         }
         console.log(data)
+        if (
+          moment(data.end_expiration).clone().format('YYYY-MM-DD HH:mm') <
+          moment().clone().format('YYYY-MM-DD HH:mm')
+        ) {
+          await updateStatus(id, { status: 'declined' })
+          setExpired(true)
+        }
       }
     }
     if (!mounted.current) {
@@ -39,6 +49,14 @@ const Payment = () => {
     }
   })
   const paymentHandler = async (receiptData) => {
+    if (
+      moment(data.end_expiration).clone().format('YYYY-MM-DD HH:mm') <
+      moment().clone().format('YYYY-MM-DD HH:mm')
+    ) {
+      await updateStatus(id, { status: 'declined' })
+      setExpired(true)
+      return
+    }
     setIsLoading(true)
     const newData = {
       status: 'reserved',
@@ -84,22 +102,37 @@ const Payment = () => {
       </Head>
       <Header active="" />
       <div className="mx-auto mb-auto w-full  max-w-container">
-        <div className="mb-auto px-9">
-          <h1 className="mb-2 p-4 text-2xl text-slate-900">
-            Payment for Reservation
-          </h1>
-          <PaymentLayout
-            action={paymentHandler}
-            total={data?.total}
-            metaData={{
-              roomType: data?.roomType,
-              preferredRoom: data?.preferredRoom,
-            }}
-            id={id}
-            isLoading={isLoading}
-            mode="confirmation"
-          />
-        </div>
+        {data &&
+          (!expired ? (
+            <div className="mb-auto px-9">
+              <h1 className="mb-2 p-4 text-2xl text-slate-900">
+                Payment for Reservation
+              </h1>
+              <PaymentLayout
+                action={paymentHandler}
+                total={data?.total}
+                metaData={{
+                  roomType: data?.roomType,
+                  preferredRoom: data?.preferredRoom,
+                }}
+                id={id}
+                isLoading={isLoading}
+                mode="confirmation"
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              <p className="mt-10 text-center text-2xl font-semibold">
+                Payment for this reservation is automatically cancelled, because
+                you did not make a payment on a given time.
+              </p>
+              <Link href="/customer/reservation">
+                <button className="mt-4 rounded-lg bg-emerald-500 p-4 py-2 text-white">
+                  Back to Reservation History
+                </button>
+              </Link>
+            </div>
+          ))}
       </div>
       <Footer />
     </>

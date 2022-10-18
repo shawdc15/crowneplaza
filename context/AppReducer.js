@@ -1,6 +1,6 @@
 export const initialState = {
   user: {},
-  isAuth: false,
+  isAuth: null,
   isLoading: false,
   activeModal: '',
   error: [],

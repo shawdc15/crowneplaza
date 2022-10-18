@@ -8,6 +8,8 @@ import {
 } from '../../services/reservation.services'
 import { declinedReceipt } from '../../services/receipt.services'
 const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
+  console.log(id)
+  console.log(data)
   const reasonref = useRef()
 
   const [selectedData, setSelectedData] = useState()
@@ -41,10 +43,18 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
   const approveHandler = async () => {
     const res = await updateStatus(id, {
       status: 'approved',
-      start_expiration: moment().clone(),
-      end_expiration: moment().clone().add(8, 'm'),
+      end_expiration: moment().clone().add(15, 'm'),
     })
     if (res.success) {
+      const reservationData = data.filter((item) => item._id == id)
+      if (reservationData[0]?.email?.length > 0) {
+        const emailData = {
+          email: reservationData[0]?.email,
+          subject: 'approved_request',
+          name: reservationData[0]?.name,
+        }
+        await declinedReceipt(emailData)
+      }
       const newData = data.filter((item) => item._id != id)
       setData(newData)
       setModal(false)
@@ -59,8 +69,9 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
       if (reservationData[0]?.email?.length > 0) {
         const emailData = {
           email: reservationData[0]?.email,
-          subject: 'Reservation request cancelled',
+          subject: 'declined_request',
           message: reasonref.current?.value || backUpMessage,
+          name: reservationData[0]?.name,
         }
         await declinedReceipt(emailData)
       }
@@ -71,16 +82,25 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
   }
   const cancelledHandler = async (status) => {
     const res = await updateStatus(id, { status })
-
+    let backUpMessage = ''
     if (res.success) {
-      const backUpMessage =
-        'Your request for cancellation of the reservation is declined due to unreasonable agenda. We are sorry for the inconvenience and we hope you’ll understand.'
+      if (status == 'approve_cancellation') {
+        backUpMessage =
+          'Your request for cancellation is approved. The promise amount will be returned to your account, please wait for a while. Thank you.'
+      } else {
+        backUpMessage =
+          'Your request for booking is declined due to unreasonable agenda. We are sorry for the inconvenience and we hope you’ll understand.'
+      }
       const reservationData = data.filter((item) => item._id == id)
       if (reservationData[0]?.email?.length > 0) {
         const emailData = {
           email: reservationData[0]?.email,
-          subject: 'declined_cancel',
-          message: reasonref.current?.value || backUpMessage,
+          subject: 'approved_cancel',
+          message:
+            status == 'approve_cancellation'
+              ? backUpMessage
+              : reasonref.current?.value || backUpMessage,
+          name: `${data.name}`,
         }
         await declinedReceipt(emailData)
       }
@@ -141,7 +161,7 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
                       <p>No of Guests: {noOfGuest}</p>
                       <p>Adult: {noOfAdult}</p>
                       <p>Children: {noOfChildren}</p>
-                      <p>Contact: {contact}</p>
+                      {contact && <p>Contact: {contact}</p>}
                     </div>
                     <div className="p-2 text-slate-600">
                       <p>No of extra beds: {noOfExtraBed}</p>

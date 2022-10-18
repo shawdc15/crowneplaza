@@ -19,13 +19,17 @@ async function sendEmail(req, res) {
       finalHtml = confirmation(req.body)
       sub = 'Confirmation'
       break
-    case 'declined_cancel':
+    case 'approved_cancel':
       finalHtml = declinedCancel(req.body)
-      sub = 'Declined Cancellation'
+      sub = 'Approved Cancellation'
       break
-    case 'request':
-      finalHtml = requested(req.body)
-      sub = 'Book Request'
+    case 'approved_request':
+      finalHtml = approvedRequest(req.body)
+      sub = 'Approved Reservation Request'
+      break
+    case 'declined_request':
+      finalHtml = declinedCancel(req.body)
+      sub = 'Declined Reservation Request'
       break
     default:
       break
@@ -401,7 +405,7 @@ const declinedCancel = ({ name, message }) => {
   `
 }
 
-const requested = ({ link, name }) => {
+const approvedRequest = ({ name }) => {
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html lang="en">
   <head>
@@ -413,9 +417,12 @@ const requested = ({ link, name }) => {
     <link rel="stylesheet" href="css/styles.css?v=1.0">
     </head>
   <body>
-    <span>Good day ${name}, your book request has been approved by the manager, Please pay for the given time to make the reservation complete or else the request will be automatically cancelled. </span><br>
-    <p>Click to proceed in payment page</p>
-    <a href="${link}">${link}</a>
+    <span>Hello, ${name}
+    <br/>We have already approved your request for your reservation. Please be mindful with our health protocols. Please do not forget to bring your vaccination cards as we will check it again once you are already in our hotel
+    <br/>Your 50% balance should be paid upon checking-in in our hotel. Please coordinate with our Hotel Receptionist to confirm your identity and reservation. Thank you and enjoy your stay!
+
+NOTE: Pay your 50% downpayment through paypal within 15 minutes. If you fail to pay within the time limit given, your reservation will be cancelled.</span><br>
+    
     <p>
         <br/>
         <br/>Crowne Plaza

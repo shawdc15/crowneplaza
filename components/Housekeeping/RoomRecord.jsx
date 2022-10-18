@@ -145,7 +145,7 @@ const RoomRecord = ({ role }) => {
       </Head>
       <RoleHeader active="room" role={role} />
 
-      <div className="mx-auto w-full max-w-container p-4">
+      <div className="mx-auto w-full max-w-container overflow-auto p-4">
         <div className="mb-2 flex items-center">
           <button className="" onClick={backHandler}>
             <BackSvg />
