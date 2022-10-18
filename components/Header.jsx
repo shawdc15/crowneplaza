@@ -97,47 +97,43 @@ const Header = ({ active }) => {
             </li>
           ))}
         </ul>
-        {state?.isAuth != null ? (
-          !state?.isAuth ? (
-            <div className="flex-col px-10 text-slate-300 lg:ml-4 lg:flex lg:flex-row lg:items-center lg:p-0 lg:text-slate-800">
-              <button
-                onClick={() => {
-                  dispatch({ type: 'OPEN_LOGIN_MODAL' })
-                  setMenuSidebarStatus(false)
-                }}
-                className="w-full px-4 py-3 text-left text-2xl font-semibold  transition-colors duration-300 hover:text-emerald-500 lg:w-auto lg:text-sm"
-              >
-                Login
-              </button>
-              <span className="hidden lg:block">|</span>
-              <button
-                onClick={() => {
-                  dispatch({ type: 'OPEN_REGISTER_MODAL' })
-                  setMenuSidebarStatus(false)
-                }}
-                className="w-full px-4 py-3 text-left text-2xl font-semibold  transition-colors duration-300 hover:text-emerald-500 lg:w-auto lg:text-sm"
-              >
-                Register
-              </button>
-            </div>
-          ) : (
-            <div
-              onMouseLeave={() =>
-                dispatch({ type: 'SWITCH_PROFILE_MODAL_STATUS' })
-              }
-              onMouseEnter={() =>
-                dispatch({ type: 'SWITCH_PROFILE_MODAL_STATUS' })
-              }
-              className="flex-col px-10 text-slate-300 lg:ml-4 lg:flex lg:flex-row lg:items-center lg:p-0 lg:text-slate-800"
+        {!state?.isAuth ? (
+          <div className="flex-col px-10 text-slate-300 lg:ml-4 lg:flex lg:flex-row lg:items-center lg:p-0 lg:text-slate-800">
+            <button
+              onClick={() => {
+                dispatch({ type: 'OPEN_LOGIN_MODAL' })
+                setMenuSidebarStatus(false)
+              }}
+              className="w-full px-4 py-3 text-left text-2xl font-semibold  transition-colors duration-300 hover:text-emerald-500 lg:w-auto lg:text-sm"
             >
-              <button className="w-full px-4 py-3 text-left text-2xl font-semibold  transition-colors duration-300 hover:text-emerald-500 lg:w-auto lg:text-sm">
-                Profile
-              </button>{' '}
-              <AccountModal active={active} modal={setMenuSidebarStatus} />
-            </div>
-          )
+              Login
+            </button>
+            <span className="hidden lg:block">|</span>
+            <button
+              onClick={() => {
+                dispatch({ type: 'OPEN_REGISTER_MODAL' })
+                setMenuSidebarStatus(false)
+              }}
+              className="w-full px-4 py-3 text-left text-2xl font-semibold  transition-colors duration-300 hover:text-emerald-500 lg:w-auto lg:text-sm"
+            >
+              Register
+            </button>
+          </div>
         ) : (
-          <p className="text-sm font-semibold">Loading Session...</p>
+          <div
+            onMouseLeave={() =>
+              dispatch({ type: 'SWITCH_PROFILE_MODAL_STATUS' })
+            }
+            onMouseEnter={() =>
+              dispatch({ type: 'SWITCH_PROFILE_MODAL_STATUS' })
+            }
+            className="flex-col px-10 text-slate-300 lg:ml-4 lg:flex lg:flex-row lg:items-center lg:p-0 lg:text-slate-800"
+          >
+            <button className="w-full px-4 py-3 text-left text-2xl font-semibold  transition-colors duration-300 hover:text-emerald-500 lg:w-auto lg:text-sm">
+              Profile
+            </button>{' '}
+            <AccountModal active={active} modal={setMenuSidebarStatus} />
+          </div>
         )}
       </div>
       {/* Auth Modal  */}
