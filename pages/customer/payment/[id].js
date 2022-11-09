@@ -66,7 +66,7 @@ const Payment = () => {
         }
         const script = document.createElement('script')
         const url =
-          'https://www.paypal.com/sdk/js?client-id=ASJfePkzWCL5u8iu34Gg5IjirpamC96tg8EBuB-mE5OG4HMTMFvLxqZK2w-jO0KjtVLXjXItmk9yFAEQ&locale=en_US&currency=PHP&disable-funding=credit,card'
+          'https://www.paypal.com/sdk/js?client-id=AbvvE0-jCAzqcej9uWf_9-7hmsFbiAW10yYfwjTSbIa4Ct5bJnlOu_82lJll6murAvH-FXzvlCeY53Nt&locale=en_US&currency=PHP&disable-funding=credit,card'
         script.src = url
         script.type = 'text/javascript'
         script.async = true
