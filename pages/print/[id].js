@@ -73,8 +73,10 @@ const Print = () => {
               <p>Room No: {data?.roomNo}</p>
               <p>Room Floor: {data?.roomFloor}</p>
               <p>Room Type: {data?.roomName}</p>
-              <p>Room Status: {data?.roomStatus}</p>
-              <p>Reservation Status: {data?.reservationStatus}</p>
+              <p>Room Status: {data?.roomStatus || 'Clean'}</p>
+              <p>
+                Reservation Status: {data?.reservationStatus || 'Not Reserved'}
+              </p>
               <p>Verified By: {data?.verifiedBy}</p>
             </div>
             <button

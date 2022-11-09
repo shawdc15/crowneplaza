@@ -109,8 +109,11 @@ const RoomRecord = ({ role }) => {
     if (role == 'manager') {
       newData['roomStatus'] = temp['roomStatus']
       newData['reservationStatus'] = temp['reservationStatus']
-      newData['verifiedBy'] = 'John Doe'
+      newData['verifiedBy'] = 'Manager'
+    } else {
+      newData['verifiedBy'] = 'Housekeeping Ssupervisor'
     }
+    console.log(newData)
     const url = {
       roomNo: id.split('-')[1],
       roomName: id.split('-')[0],
@@ -121,7 +124,7 @@ const RoomRecord = ({ role }) => {
       roomStatus: temp['roomStatus'],
       reservationStatus: temp['reservationStatus'],
       cleaner: temp['cleaner'],
-      verifiedBy: 'John Doe',
+      verifiedBy: newData['verifiedBy'],
     }
     const { success, data } = await addCalendarData(newData)
     if (success) {
@@ -295,7 +298,7 @@ const RoomRecord = ({ role }) => {
               </>
             )}
             <div className="flex gap-4">
-              {role == 'manager' && data?._id && (
+              {data?._id && (
                 <>
                   <a
                     className="rounded-md bg-slate-500 px-4 py-2 text-white"

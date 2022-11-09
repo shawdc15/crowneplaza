@@ -9,6 +9,7 @@ const OtherStaffModal = ({ setModal, mode, role }) => {
   const firstNameRef = useRef()
   const contactRef = useRef()
   const shiftRef = useRef()
+  const employmentRef = useRef()
 
   const [error, setError] = useState({})
 
@@ -46,6 +47,7 @@ const OtherStaffModal = ({ setModal, mode, role }) => {
         contact: contactRef.current.value,
         role: role.toLowerCase(),
         shift: shiftRef.current.value,
+        statusofemployment: employmentRef.current?.value,
       }
       if (mode === 'add') {
         const res = await createStaff(newData)
@@ -97,7 +99,7 @@ const OtherStaffModal = ({ setModal, mode, role }) => {
             Close
           </p>
         </div>
-        <div className="flex w-screen max-w-sm flex-col">
+        <div className="flex flex-col">
           <span className="text-rose-500">{error?.emailError}</span>
           <label className="mt-2 text-slate-600">Email</label>
           {mode == 'add' ? (
@@ -153,6 +155,30 @@ const OtherStaffModal = ({ setModal, mode, role }) => {
         >
           <option value="morning">Morning</option>
           <option value="night">Night</option>
+        </select>
+        <label className="mt-2 text-slate-600">Status of Employment</label>
+        <select
+          ref={employmentRef}
+          className="my-2 w-full rounded-md border border-slate-300 px-4 py-3"
+        >
+          <option
+            value="working"
+            selected={state.adminModalData?.statusofemployment == 'working'}
+          >
+            Working
+          </option>
+          <option
+            value="resigned"
+            selected={state.adminModalData?.statusofemployment == 'resigned'}
+          >
+            Resigned
+          </option>
+          <option
+            value="leave"
+            selected={state.adminModalData?.statusofemployment == 'leave'}
+          >
+            Leave
+          </option>
         </select>
         <div className="my-4">
           <button className="w-full cursor-pointer rounded-md bg-emerald-500 py-2 text-white">

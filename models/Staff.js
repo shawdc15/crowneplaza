@@ -33,6 +33,10 @@ const StaffSchema = new mongoose.Schema({
   position: {
     type: String,
   },
+  statusofemployment: {
+    type: String,
+    default: 'working',
+  },
 })
 
 module.exports = mongoose.models.Staff || mongoose.model('Staff', StaffSchema)

@@ -11,7 +11,7 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
   console.log(id)
   console.log(data)
   const reasonref = useRef()
-
+  const [isLoading, setIsLoading] = useState(false)
   const [selectedData, setSelectedData] = useState()
   const [selectedLargeImage, setSelectedLargeImage] = useState(null)
   useEffect(async () => {
@@ -25,22 +25,27 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
     return xx.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   }
   const checkInHandler = async () => {
+    setIsLoading(true)
     const res = await updateStatus(id, { status: 'checkedIn' })
     if (res.success) {
       const newData = data.filter((item) => item._id != id)
       setData(newData)
       setModal(false)
     }
+    setIsLoading(false)
   }
   const checkOutHandler = async () => {
+    setIsLoading(true)
     const res = await updateStatus(id, { status: 'checkedOut' })
     if (res.success) {
       const newData = data.filter((item) => item._id != id)
       setData(newData)
       setModal(false)
     }
+    setIsLoading(false)
   }
   const approveHandler = async () => {
+    setIsLoading(true)
     const res = await updateStatus(id, {
       status: 'approved',
       end_expiration: moment().clone().add(15, 'm'),
@@ -59,8 +64,10 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
       setData(newData)
       setModal(false)
     }
+    setIsLoading(false)
   }
   const declineHandler = async () => {
+    setIsLoading(true)
     const res = await updateStatus(id, { status: 'declined' })
     if (res.success) {
       const backUpMessage =
@@ -79,8 +86,10 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
       setData(newData)
       setModal(false)
     }
+    setIsLoading(false)
   }
   const cancelledHandler = async (status) => {
+    setIsLoading(true)
     const res = await updateStatus(id, { status })
     let backUpMessage = ''
     if (res.success) {
@@ -108,6 +117,7 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
       setData(newData)
       setModal(false)
     }
+    setIsLoading(false)
   }
   const receiptHandler = (id) => {
     for (let r in receipt) {
@@ -185,97 +195,108 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
                     </div>
                   </div>
                 </div>
-                {status != 'request cancellation' && status != 'checkedIn' ? (
+                {!isLoading ? (
                   <>
-                    <p className="p-2 text-lg">
-                      Down Payment: &#8369; {formatTotal(total / 2)}
-                    </p>
-                    <p className="p-2 text-lg">
-                      Balance: &#8369; {formatTotal(total / 2)}
-                    </p>
-                  </>
-                ) : (
-                  <p className="p-2 text-lg">
-                    Total Paid: &#8369; {formatTotal(total)}
-                  </p>
-                )}
-                {(status == 'request cancellation' ||
-                  status == 'requested') && (
-                  <textarea
-                    ref={reasonref}
-                    placeholder="Indicate the reason why you decline"
-                    className="mx-2 w-full rounded-md border border-slate-300 p-2"
-                  ></textarea>
-                )}
-                <div className="mt-4 flex justify-between gap-4 p-2">
-                  <button
-                    onClick={() => setModal(false)}
-                    className="rounded-md bg-slate-100 px-4 py-2"
-                  >
-                    Go Back
-                  </button>
-                  <div className="flex gap-4">
-                    {status == 'checkedIn' ? (
-                      <button
-                        onClick={checkOutHandler}
-                        className="rounded-md bg-emerald-500 px-4 py-2 text-white"
-                      >
-                        Check Out
-                      </button>
-                    ) : status == 'reserved' ? (
-                      <button
-                        onClick={checkInHandler}
-                        className="rounded-md bg-emerald-500 px-4 py-2 text-white"
-                      >
-                        Mark as paid and Check-in
-                      </button>
-                    ) : status == 'requested' ? (
+                    {status != 'request cancellation' &&
+                    status != 'checkedIn' ? (
                       <>
-                        <button
-                          onClick={declineHandler}
-                          className="rounded-md bg-slate-500 px-4 py-2 text-white"
-                        >
-                          Decline
-                        </button>
-                        <button
-                          onClick={approveHandler}
-                          className="rounded-md bg-emerald-500 px-4 py-2 text-white"
-                        >
-                          Approve
-                        </button>
+                        <p className="p-2 text-lg">
+                          Down Payment: &#8369; {formatTotal(total / 2)}
+                        </p>
+                        <p className="p-2 text-lg">
+                          Balance: &#8369; {formatTotal(total / 2)}
+                        </p>
                       </>
                     ) : (
-                      status == 'request cancellation' && (
-                        <>
+                      <p className="p-2 text-lg">
+                        Total Paid: &#8369; {formatTotal(total)}
+                      </p>
+                    )}
+                    {(status == 'request cancellation' ||
+                      status == 'requested') && (
+                      <textarea
+                        ref={reasonref}
+                        placeholder="Indicate the reason why you decline"
+                        className="mx-2 w-full rounded-md border border-slate-300 p-2"
+                      ></textarea>
+                    )}
+                    <div className="mt-4 flex justify-between gap-4 p-2">
+                      <button
+                        onClick={() => setModal(false)}
+                        className="rounded-md bg-slate-100 px-4 py-2"
+                      >
+                        Go Back
+                      </button>
+                      <div className="flex gap-4">
+                        {status == 'checkedIn' ? (
                           <button
-                            onClick={() => cancelledHandler('reserved')}
-                            className="rounded-md bg-slate-500 px-4 py-2 text-white"
-                          >
-                            Decline
-                          </button>
-                          <button
-                            onClick={() =>
-                              cancelledHandler('approve_cancellation')
-                            }
+                            onClick={checkOutHandler}
                             className="rounded-md bg-emerald-500 px-4 py-2 text-white"
                           >
-                            Approve
+                            Check Out
                           </button>
-                        </>
-                      )
+                        ) : status == 'reserved' ? (
+                          <button
+                            onClick={checkInHandler}
+                            className="rounded-md bg-emerald-500 px-4 py-2 text-white"
+                          >
+                            Mark as paid and Check-in
+                          </button>
+                        ) : status == 'requested' ? (
+                          <>
+                            <button
+                              onClick={declineHandler}
+                              className="rounded-md bg-slate-500 px-4 py-2 text-white"
+                            >
+                              Decline
+                            </button>
+                            <button
+                              onClick={approveHandler}
+                              className="rounded-md bg-emerald-500 px-4 py-2 text-white"
+                            >
+                              Approve
+                            </button>
+                          </>
+                        ) : (
+                          status == 'request cancellation' && (
+                            <>
+                              <button
+                                onClick={() =>
+                                  cancelledHandler(
+                                    'declined cancel reservation'
+                                  )
+                                }
+                                className="rounded-md bg-slate-500 px-4 py-2 text-white"
+                              >
+                                Decline
+                              </button>
+                              <button
+                                onClick={() =>
+                                  cancelledHandler('approve_cancellation')
+                                }
+                                className="rounded-md bg-emerald-500 px-4 py-2 text-white"
+                              >
+                                Approve
+                              </button>
+                            </>
+                          )
+                        )}
+                      </div>
+                    </div>
+                    {selectedLargeImage != null && (
+                      <div
+                        onClick={() => setSelectedLargeImage(null)}
+                        className="absolute top-0 left-0 flex h-full w-full cursor-zoom-out items-center justify-center"
+                      >
+                        <img
+                          className="z-50 max-h-imageLg w-imageLg bg-white object-cover"
+                          src={selectedLargeImage}
+                        />
+                      </div>
                     )}
-                  </div>
-                </div>
-                {selectedLargeImage != null && (
-                  <div
-                    onClick={() => setSelectedLargeImage(null)}
-                    className="absolute top-0 left-0 flex h-full w-full cursor-zoom-out items-center justify-center"
-                  >
-                    <img
-                      className="z-50 max-h-imageLg w-imageLg bg-white object-cover"
-                      src={selectedLargeImage}
-                    />
-                  </div>
+                  </>
+                ) : (
+                  <p className="w-full p-4 text-right text-lg">Submitting...</p>
                 )}
               </ModalLayout>
             )

@@ -8,7 +8,7 @@ const ManagerModal = ({ setModal, mode }) => {
   const lastNameRef = useRef()
   const firstNameRef = useRef()
   const contactRef = useRef()
-
+  const employmentRef = useRef()
   const [error, setError] = useState({})
 
   const submitHandler = async (e) => {
@@ -44,6 +44,7 @@ const ManagerModal = ({ setModal, mode }) => {
         lastName: lastNameRef.current.value,
         contact: contactRef.current.value,
         role: 'manager',
+        statusofemployment: employmentRef.current?.value,
       }
       if (mode === 'add') {
         const res = await createStaff(newData)
@@ -100,7 +101,7 @@ const ManagerModal = ({ setModal, mode }) => {
             <input
               type="email"
               ref={emailRef}
-              className=" my-2 rounded-md border border-slate-300 px-4 py-3"
+              className="my-2 w-full rounded-md border border-slate-300 px-4 py-3"
               placeholder="Email"
               defaultValue={state.adminModalData?.email}
             />
@@ -115,7 +116,7 @@ const ManagerModal = ({ setModal, mode }) => {
           <input
             type="text"
             ref={firstNameRef}
-            className=" my-2 rounded-md border border-slate-300 px-4 py-3"
+            className="my-2 w-full rounded-md border border-slate-300 px-4 py-3"
             placeholder="First Name"
             defaultValue={state.adminModalData?.firstName}
           />
@@ -125,7 +126,7 @@ const ManagerModal = ({ setModal, mode }) => {
           <input
             type="text"
             ref={lastNameRef}
-            className=" my-2 rounded-md border border-slate-300 px-4 py-3"
+            className="my-2 w-full rounded-md border border-slate-300 px-4 py-3"
             placeholder="Last Name"
             defaultValue={state.adminModalData?.lastName}
           />
@@ -135,10 +136,34 @@ const ManagerModal = ({ setModal, mode }) => {
           <input
             type="number"
             ref={contactRef}
-            className=" my-2 rounded-md border border-slate-300 px-4 py-3"
+            className="my-2 w-full rounded-md border border-slate-300 px-4 py-3"
             placeholder="Contact"
             defaultValue={state.adminModalData?.contact}
           />
+          <label className="mt-2 text-slate-600">Status of Employment</label>
+          <select
+            ref={employmentRef}
+            className=" my-2 rounded-md border border-slate-300 px-4 py-3"
+          >
+            <option
+              value="working"
+              selected={state.adminModalData?.statusofemployment == 'working'}
+            >
+              Working
+            </option>
+            <option
+              value="resigned"
+              selected={state.adminModalData?.statusofemployment == 'resigned'}
+            >
+              Resigned
+            </option>
+            <option
+              value="leave"
+              selected={state.adminModalData?.statusofemployment == 'leave'}
+            >
+              Leave
+            </option>
+          </select>
         </div>
         <div className="my-4">
           <button className="w-full cursor-pointer rounded-md bg-emerald-500 py-2 text-white">

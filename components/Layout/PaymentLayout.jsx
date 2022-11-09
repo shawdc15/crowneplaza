@@ -41,7 +41,7 @@ const PaymentLayout = ({
     newData = {
       ...newData,
       ...metaData,
-      paymentMethod: method,
+      // paymentMethod: method,
       channel: method,
       status: mode == 'confirmation' ? 'paid' : 'pending',
       reason,

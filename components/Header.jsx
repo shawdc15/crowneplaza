@@ -61,7 +61,7 @@ const Header = ({ active }) => {
       <div
         className={`${
           menuSidebarStatus
-            ? 'fixed top-0 left-0 block h-screen w-screen flex-col bg-slate-900'
+            ? 'fixed top-0 left-0 z-50 block h-screen w-screen flex-col bg-slate-900'
             : 'hidden'
         } items-center lg:relative lg:flex lg:h-auto lg:w-auto lg:flex-row lg:bg-transparent`}
       >

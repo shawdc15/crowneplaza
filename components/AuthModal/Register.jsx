@@ -163,6 +163,16 @@ const Register = () => {
                     className="my-2 rounded-md border border-slate-300 px-4 py-3 "
                     placeholder="Confirm Password"
                   />
+                  <p>
+                    By registering, you agree to our{' '}
+                    <a
+                      target="_blank"
+                      className="text-emerald-500 underline"
+                      href="/terms-and-agreement.pdf"
+                    >
+                      Terms and conditions
+                    </a>
+                  </p>
                   {!isLoading ? (
                     <button
                       type="submit"
@@ -179,6 +189,7 @@ const Register = () => {
                     </p>
                   )}
                 </form>
+
                 <p>
                   Already had an account?{' '}
                   <button

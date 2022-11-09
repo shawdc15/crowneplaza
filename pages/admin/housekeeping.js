@@ -28,6 +28,10 @@ const Housekeeping = () => {
       name: 'Shift',
       key: 'shift',
     },
+    {
+      name: 'Status of Employment',
+      key: 'statusofemployment',
+    },
   ]
   useEffect(async () => {
     dispatch({ type: 'CLEAR_SELECTED_DATA' })

@@ -116,7 +116,11 @@ const AdminTable = ({
                   {data_headers &&
                     data_headers.map(({ key }, sub_index) => (
                       <td
-                        className="border-2 border-slate-100 px-3 text-slate-600"
+                        className={`border-2 border-slate-100 px-3 text-slate-600 ${
+                          key == 'statusofemployment' || key == 'shift'
+                            ? 'capitalize'
+                            : ''
+                        }`}
                         key={sub_index}
                       >
                         {/* {key == 'total' && 'asd'} */}

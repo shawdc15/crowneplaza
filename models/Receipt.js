@@ -8,14 +8,11 @@ const ReceiptSchema = new mongoose.Schema({
   reason: {
     type: String,
   },
-  paymentMethod: {
-    type: String,
-    required: [true, 'Please fill up this field'],
-  },
+  // paymentMethod: {
+  //   type: String,
+  //   required: [true, 'Please fill up this field'],
+  // },
   creditCardNumber: {
-    type: String,
-  },
-  gcashNumber: {
     type: String,
   },
   preferredRoom: {

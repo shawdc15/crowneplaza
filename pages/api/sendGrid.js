@@ -21,7 +21,7 @@ async function sendEmail(req, res) {
       break
     case 'approved_cancel':
       finalHtml = declinedCancel(req.body)
-      sub = 'Approved Cancellation'
+      sub = 'Cancellation Request'
       break
     case 'approved_request':
       finalHtml = approvedRequest(req.body)
@@ -418,11 +418,9 @@ const approvedRequest = ({ name }) => {
     </head>
   <body>
     <span>Hello, ${name}
-    <br/>We have already approved your request for your reservation. Please be mindful with our health protocols. Please do not forget to bring your vaccination cards as we will check it again once you are already in our hotel
-    <br/>Your 50% balance should be paid upon checking-in in our hotel. Please coordinate with our Hotel Receptionist to confirm your identity and reservation. Thank you and enjoy your stay!
-
-NOTE: Pay your 50% downpayment through paypal within 15 minutes. If you fail to pay within the time limit given, your reservation will be cancelled.</span><br>
-    
+    <br/>We have already approved your request for your reservation. Please be mindful with our health protocols. Please do not forget to bring your vaccination cards as we will check it again once you are already in our hotel. Your 50% balance should be paid upon checking-in in our hotel. Please coordinate with our Hotel Receptionist to confirm your identity and reservation.
+    <br/>Thank you and enjoy your stay! 
+    <br/>NOTE: Pay your 50% downpayment through our online payment medium within 15 minutes. If you fail to pay within the time limit given, your reservation will be cancelled. Go directly to your Dashboard - Order History and find your order then click the "Make a Payment" button.    
     <p>
         <br/>
         <br/>Crowne Plaza

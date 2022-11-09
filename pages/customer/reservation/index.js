@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Footer, Header, Loading } from '../../../components'
 import { useAppContext } from '../../../context/AppContext'
 import { getCustomerReservation } from '../../../services/reservation.services'
@@ -27,6 +27,7 @@ const History = () => {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     }
   }
+
   return (
     <>
       <Head>
