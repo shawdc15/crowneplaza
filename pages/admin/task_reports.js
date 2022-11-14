@@ -68,8 +68,8 @@ const TaskReports = () => {
 
       <div className={`flex min-h-screen ${nav ? 'overflow-hidden' : ''}`}>
         <AdminSidebar nav={nav} />
-        <div className="w-full p-4 lg:p-10">
-          <div>
+        <div className="w-full overflow-auto p-4 lg:p-10">
+          <div className="sticky left-0">
             <div className="mb-4 flex items-center gap-4 lg:hidden">
               <span
                 onClick={() => setNav(!nav)}
