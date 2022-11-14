@@ -141,7 +141,7 @@ const Register = () => {
                           id="fix"
                           ref={contactRef}
                           type="number"
-                          className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 pl-12 lg:ml-2"
+                          className="w-full my-2 rounded-md border border-slate-300 px-4 py-3 pl-12 lg:ml-2"
                           placeholder="Contact Number"
                         />
                       </div>
